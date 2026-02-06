@@ -6,16 +6,18 @@
     <title>SLER | Nodo Central Bell Ville</title>
     <style>
         :root {
-            /* Identidad General: Bio-Laboratorio */
-            --bg: #061109;           
-            --card: #0d1f14;         
-            --accent: #52d68a;       
-            --border: #1a3324;       
-            --text-main: #e2f3e9;    
-            --text-dim: #6a8c77;     
-            /* Colores de Firma SLER */
+            /* Identidad: Marino Técnico */
+            --bg: #041625;           /* Azul marino profundo */
+            --card: #0a2438;         /* Tono océano para paneles */
+            --accent: #0ea5e9;       /* Celeste brillante para interactividad */
+            --border: #1e3a53;       /* Azul acero para bordes */
+            --text-main: #f0f9ff;    /* Blanco con matiz celeste */
+            --text-dim: #7dd3fc;     /* Celeste suave para datos */
+            
+            /* Colores SLER (Originales) */
             --sler-turq: #00ffcc;    
             --sler-gold: #fde047;
+
             /* Modo Test */
             --test-bg: #ffffff;
             --test-text: #000000;
@@ -38,75 +40,78 @@
             margin: 0 auto;
         }
 
-        /* NAVEGACIÓN IZQUIERDA */
+        /* COLUMNA IZQUIERDA: NAVEGACIÓN */
         .nav-col {
             border-right: 1px solid var(--border);
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
-        .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); margin-bottom: 30px; }
+        .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); margin-bottom: 30px; letter-spacing: -2px; }
         .nav-item {
             padding: 12px 15px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
             font-weight: 500;
+            color: var(--text-dim);
         }
         .nav-item:hover { background: var(--card); color: var(--accent); }
         .nav-active { background: var(--card); color: var(--accent); border-left: 4px solid var(--accent); }
 
-        /* COLUMNA CENTRAL (FEED / TESTS) */
+        /* COLUMNA CENTRAL: FEED / TESTS */
         .main-col {
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+            background: linear-gradient(180deg, #041625 0%, #061e31 100%);
         }
         .header-main {
             padding: 20px;
             border-bottom: 1px solid var(--border);
-            background: rgba(6, 17, 9, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(4, 22, 37, 0.9);
+            backdrop-filter: blur(12px);
             position: sticky; top: 0; z-index: 10;
         }
 
-        /* CONTENEDOR DE TEST (FONDO BLANCO) */
+        /* SECCIÓN TEST (BLANCO PURO) */
         .test-zone {
             background-color: var(--test-bg);
             color: var(--test-text);
-            margin: 30px;
-            padding: 50px;
+            margin: 40px;
+            padding: 60px;
             border-radius: 4px;
-            min-height: 400px;
-            display: none; /* Se activa con JS */
+            min-height: 450px;
+            display: none;
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
         .sler-row {
             font-family: 'Consolas', monospace;
             font-size: 20px;
             font-weight: bold;
-            margin: 8px 0;
+            margin: 10px 0;
+            letter-spacing: 0.5px;
         }
-        .m-line { text-align: left; border-left: 5px solid #000; padding-left: 15px; }
-        .c-line { text-align: right; border-right: 5px solid #000; padding-right: 15px; }
+        .m-line { text-align: left; border-left: 6px solid #000; padding-left: 20px; }
+        .c-line { text-align: right; border-right: 6px solid #000; padding-right: 20px; }
 
-        /* COLUMNA DERECHA */
-        .side-col { padding: 20px; }
+        /* COLUMNA DERECHA: REFERENCIAS (BORRADAS RECUPERADAS) */
+        .side-col { padding: 25px; display: flex; flex-direction: column; gap: 20px; }
         .box-info {
             background: var(--card);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--border);
         }
+        .trend-tag { color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; }
 
-        .btn-action {
+        .btn-test {
             background: #000; color: #fff;
-            border: none; padding: 12px 30px;
+            border: none; padding: 15px 40px;
             font-weight: bold; cursor: pointer;
             margin-top: 40px; align-self: center;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -117,15 +122,74 @@
             <div class="logo-s">SLER</div>
             <div class="nav-item nav-active" onclick="switchTab('feed')">🏠 Inicio</div>
             <div class="nav-item" onclick="switchTab('test')">🔬 Laboratorio Test</div>
-            <div class="nav-item">📚 Mi Biblioteca</div>
+            <div class="nav-item">📖 Publicaciones</div>
+            <div class="nav-item">⚙️ Nodo Central</div>
         </nav>
 
         <main class="main-col">
             <div class="header-main">
-                <h2 id="title-display" style="margin:0; font-size: 18px;">Ecosistema Neurálgico</h2>
+                <h2 id="title-display" style="margin:0; font-size: 18px; color: var(--accent);">Control Neurálgico</h2>
             </div>
 
             <div id="section-feed" style="padding: 20px;">
-                <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-                    <p style="color: var(--text-dim); font-size: 14px;">@sler_engine · Nodo Bell Ville</p>
-                    <p>Bienvenido al entorno de control. La estrategia actual prioriza la validación de la isometría de caracteres y la reducción del salto sacádico.</p
+                <div style="background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid var(--border);">
+                    <div class="trend-tag">ESTADO DEL NODO: ONLINE</div>
+                    <p style="margin-top:10px; line-height:1.6;">Bienvenido, Ribot. El sistema está configurado para la visualización parcial. Las referencias de hardware y geolocalización han sido vinculadas exitosamente.</p>
+                </div>
+            </div>
+
+            <div id="section-test" class="test-zone">
+                <div style="text-align: center; color: #999; font-size: 11px; margin-bottom: 50px; letter-spacing: 3px;">MÉTRICA DE ISOMETRÍA v1.0</div>
+                <div class="sler-row m-line">EL DESARROLLO DE LA NEUROCIEN-</div>
+                <div class="sler-row c-line">.CIA APLICADA A LA LECTURA RÁPI</div>
+                <div class="sler-row m-line">DA REQUIERE UNA PRECISIÓN MILI-</div>
+                <div class="sler-row c-line">.MÉTRICA ESPECIALMENTE CUANDO</div>
+                <button class="btn-test" onclick="alert('Métrica de Bell Ville Registrada')">Finalizar Test</button>
+            </div>
+        </main>
+
+        <aside class="side-col">
+            <div class="box-info">
+                <div class="trend-tag">PROPIEDAD INTELECTUAL</div>
+                <p style="font-size: 14px; margin-top:8px;">Software Registrado (2025)<br>Autor: Ribot Jonatan</p>
+                <p style="font-size: 12px; color: var(--text-dim);">Bell Ville, Córdoba, AR.</p>
+            </div>
+
+            <div class="box-info">
+                <div class="trend-tag">HARDWARE DE CONTROL</div>
+                <div style="font-size: 13px; margin-top:10px; color: var(--text-dim);">
+                    • CPU: Intel Core i3-2330M<br>
+                    • RAM: 8.00 GB<br>
+                    • OS: Windows 11 x64
+                </div>
+            </div>
+
+            <div class="box-info">
+                <div class="trend-tag">HOSPITAL DE REFERENCIA</div>
+                <p style="font-size: 13px; margin-top:8px;">Hosp. Regional José A. Ceballos</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const feed = document.getElementById('section-feed');
+            const test = document.getElementById('section-test');
+            const title = document.getElementById('title-display');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+
+            if(tab === 'feed') {
+                feed.style.display = 'block';
+                test.style.display = 'none';
+                title.innerText = "Control Neurálgico";
+                event.currentTarget.classList.add('nav-active');
+            } else {
+                feed.style.display = 'none';
+                test.style.display = 'flex';
+                title.innerText = "Laboratorio de Tests (Modo Blanco)";
+                event.currentTarget.classList.add('nav-active');
+            }
+        }
+    </script>
+</body>
+</html>
