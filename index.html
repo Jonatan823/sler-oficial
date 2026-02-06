@@ -3,188 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SLER | Ecosistema de Lectura Recíproca</title>
+    <title>SLER | Nodo Central Bell Ville</title>
     <style>
-     <style>
-    :root {
-        /* Identidad SLER: Pureza y Eficiencia Orgánica */
-        --bg: #061109;           /* Verde bosque profundo (Paz visual) */
-        --card: #0d1f14;         /* Musgo oscuro para paneles */
-        --accent: #52d68a;       /* Verde menta glacial (Pureza) */
-        --border: #1a3324;       /* Verde tallo */
-        --text-main: #e2f3e9;    /* Blanco savia para lectura cómoda */
-        --text-dim: #6a8c77;     /* Verde salvia para datos técnicos */
-        
-        /* Colores SLER (Los "Firuletines" de Ribot Jonatan) */
-        --sler-turq: #00ffcc;    
-        --sler-gold: #fde047;    
-    }
-
-    body {
-        background-color: var(--bg);
-        color: var(--text-main);
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        overflow-x: hidden;
-    }
-
-    .layout {
-        display: grid;
-        grid-template-columns: 275px 1fr 350px;
-        max-width: 1250px;
-        width: 100%;
-        height: 100vh;
-    }
-</style>
-/* Modificación de la columna de navegación para que no parezca X */
-.nav-col {
-    background: rgba(15, 23, 42, 0.95);
-    border-right: 1px solid var(--border);
-}
-
-.nav-item {
-    font-size: 16px; /* Más técnico, menos 'social' */
-    color: var(--text-dim);
-    border-radius: 8px; /* Menos redondeado, más estilo IDE */
-}
-
-.nav-item:hover {
-    color: var(--accent);
-    background: #1e293b;
-}
-        .layout {
-            display: grid;
-            grid-template-columns: 275px 600px 350px;
-            gap: 0;
-            max-width: 1225px;
-            width: 100%;
-            height: 100vh;
+        :root {
+            /* Identidad General: Bio-Laboratorio */
+            --bg: #061109;           
+            --card: #0d1f14;         
+            --accent: #52d68a;       
+            --border: #1a3324;       
+            --text-main: #e2f3e9;    
+            --text-dim: #6a8c77;     
+            /* Colores de Firma SLER */
+            --sler-turq: #00ffcc;    
+            --sler-gold: #fde047;
+            /* Modo Test */
+            --test-bg: #ffffff;
+            --test-text: #000000;
         }
 
-        /* COLUMNA IZQUIERDA: NAVEGACIÓN */
+        body, html {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 275px 1fr 350px;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* NAVEGACIÓN IZQUIERDA */
         .nav-col {
             border-right: 1px solid var(--border);
-            padding: 10px 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); margin-bottom: 30px; }
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .nav-item:hover { background: var(--card); color: var(--accent); }
+        .nav-active { background: var(--card); color: var(--accent); border-left: 4px solid var(--accent); }
+
+        /* COLUMNA CENTRAL (FEED / TESTS) */
+        .main-col {
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
-        .nav-item {
-            padding: 12px;
-            font-size: 19px;
-            cursor: pointer;
-            border-radius: 9999px;
-            transition: 0.2s;
-            margin-bottom: 5px;
+        .header-main {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(6, 17, 9, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 10;
         }
-        .nav-item:hover { background: #181818; }
-        .logo-s { font-size: 30px; font-weight: bold; padding-left: 12px; margin-bottom: 20px; }
 
-        /* COLUMNA CENTRAL: FEED (CONTROL NEURÁLGICO) */
-        .feed-col {
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
+        /* CONTENEDOR DE TEST (FONDO BLANCO) */
+        .test-zone {
+            background-color: var(--test-bg);
+            color: var(--test-text);
+            margin: 30px;
+            padding: 50px;
+            border-radius: 4px;
+            min-height: 400px;
+            display: none; /* Se activa con JS */
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .feed-header {
-            position: sticky; top: 0; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            padding: 15px; border-bottom: 1px solid var(--border);
-            font-weight: bold; font-size: 20px;
+        .sler-row {
+            font-family: 'Consolas', monospace;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0;
         }
-        .post-mockup {
-            padding: 15px; border-bottom: 1px solid var(--border);
-            display: flex; gap: 12px;
-        }
-        .avatar { width: 48px; height: 48px; border-radius: 50%; background: #333; flex-shrink: 0; }
-        .post-content { flex: 1; }
-        .post-user { font-weight: bold; }
-        .post-handle { color: var(--text-dim); font-weight: normal; font-size: 14px; }
-        .post-text { margin-top: 10px; line-height: 1.4; }
-        
-        /* ESTÉTICA SLER DENTRO DEL POST */
-        .sler-preview {
-            margin-top: 15px;
-            border: 1px solid var(--border);
+        .m-line { text-align: left; border-left: 5px solid #000; padding-left: 15px; }
+        .c-line { text-align: right; border-right: 5px solid #000; padding-right: 15px; }
+
+        /* COLUMNA DERECHA */
+        .side-col { padding: 20px; }
+        .box-info {
+            background: var(--card);
             border-radius: 16px;
             padding: 20px;
-            background: #000;
-            font-family: 'Consolas', monospace;
-            font-size: 14px;
+            border: 1px solid var(--border);
         }
 
-        /* COLUMNA DERECHA: TENDENCIAS / INFO */
-        .info-col {
-            padding: 10px 20px;
+        .btn-action {
+            background: #000; color: #fff;
+            border: none; padding: 12px 30px;
+            font-weight: bold; cursor: pointer;
+            margin-top: 40px; align-self: center;
         }
-        .search-box {
-            background: #202327; border-radius: 9999px; padding: 10px 20px;
-            margin-bottom: 20px; color: var(--text-dim);
-        }
-        .trending-box {
-            background: var(--card); border-radius: 16px; padding: 15px;
-        }
-        .trend-item { margin-bottom: 15px; cursor: pointer; }
-        .trend-label { font-size: 13px; color: var(--text-dim); }
-        .trend-name { font-weight: bold; margin-top: 2px; }
-
-        @media (max-width: 1000px) { .layout { grid-template-columns: 80px 1fr; } .info-col { display: none; } }
     </style>
 </head>
 <body>
 
     <div class="layout">
         <nav class="nav-col">
-            <div class="logo-s">S</div>
-            <div class="nav-item">🏠 Inicio</div>
-            <div class="nav-item">🔍 Explorar</div>
-            <div class="nav-item">📖 Biblioteca</div>
-            <div class="nav-item">⚙️ Configuración</div>
+            <div class="logo-s">SLER</div>
+            <div class="nav-item nav-active" onclick="switchTab('feed')">🏠 Inicio</div>
+            <div class="nav-item" onclick="switchTab('test')">🔬 Laboratorio Test</div>
+            <div class="nav-item">📚 Mi Biblioteca</div>
         </nav>
 
-        <main class="feed-col">
-            <div class="feed-header">Sistemas SLER Oficial</div>
-            
-            <div class="post-mockup">
-                <div class="avatar" style="background: url('https://via.placeholder.com/48') center/cover;"></div>
-                <div class="post-content">
-                    <div class="post-user">Ribot Jonatan <span class="post-handle">@sler_engine · 2026</span></div>
-                    <div class="post-text">
-                        Validando la isometría de caracteres en el nodo central. El sistema de lectura recíproca no es solo un método, es la evolución del procesamiento visual.
-                    </div>
-                    <div class="sler-preview">
-                        <div style="color:#00ffcc; text-align:left; border-left: 3px solid #1d9bf0; padding-left:10px;">
-                            ESTA ES UNA VISTA PARCIAL-
-                        </div>
-                        <div style="color:#fff; text-align:right; border-right: 3px solid #ffca28; padding-right:10px; margin-top:5px;">
-                            -DEL SISTEMA DE CONTROL.
-                        </div>
-                    </div>
-                </div>
+        <main class="main-col">
+            <div class="header-main">
+                <h2 id="title-display" style="margin:0; font-size: 18px;">Ecosistema Neurálgico</h2>
             </div>
-        </main>
 
-        <aside class="info-col">
-            <div class="search-box">Buscar en SLER</div>
-            <div class="trending-box">
-                <h2 style="font-size: 20px; margin-bottom: 15px;">¿Qué está pasando?</h2>
-                <div class="trend-item">
-                    <div class="trend-label">Tecnología · Tendencia</div>
-                    <div class="trend-name">#NeurocienciaAplicada</div>
-                </div>
-                <div class="trend-item">
-                    <div class="trend-label">Propiedad Intelectual</div>
-                    <div class="trend-name">Copyright 2025 Argentina</div>
-                </div>
-                <div class="trend-item">
-                   <div class="trend-name">Test Sler</div>
-                     <div class="trend-name">Sler Chat</div>
-                     <div class="trend-name">blog</div>
-                     <div class="trend-name">libros</div>
-                </div>
-            </div>
-        </aside>
-    </div>
-
-</body>
-</html>
+            <div id="section-feed" style="padding: 20px;">
+                <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                    <p style="color: var(--text-dim); font-size: 14px;">@sler_engine · Nodo Bell Ville</p>
+                    <p>Bienvenido al entorno de control. La estrategia actual prioriza la validación de la isometría de caracteres y la reducción del salto sacádico.</p
