@@ -3,107 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SLER - Interfaz Central</title>
+    <title>SLER | Ecosistema de Lectura Recíproca</title>
     <style>
-        /* Estética formal en tonos azules y blancos */
+        :root {
+            --bg: #000000;
+            --card: #16181c;
+            --accent: #1d9bf0; /* Azul X */
+            --border: #333639;
+            --text-main: #eff3f4;
+            --text-dim: #71767b;
+        }
+
         body {
-            background-color: #1a2a3a; /* Azul oscuro formal */
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 275px 600px 350px;
+            gap: 0;
+            max-width: 1225px;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* COLUMNA IZQUIERDA: NAVEGACIÓN */
+        .nav-col {
+            border-right: 1px solid var(--border);
+            padding: 10px 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
+        .nav-item {
+            padding: 12px;
+            font-size: 19px;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: 0.2s;
+            margin-bottom: 5px;
+        }
+        .nav-item:hover { background: #181818; }
+        .logo-s { font-size: 30px; font-weight: bold; padding-left: 12px; margin-bottom: 20px; }
 
-        .container {
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
+        /* COLUMNA CENTRAL: FEED (CONTROL NEURÁLGICO) */
+        .feed-col {
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
         }
-
-        .logo-box {
-            width: 70px;
-            height: 70px;
-            background: #ffffff;
-            color: #1a2a3a;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            font-weight: bold;
-            margin: 0 auto 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        .feed-header {
+            position: sticky; top: 0; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            padding: 15px; border-bottom: 1px solid var(--border);
+            font-weight: bold; font-size: 20px;
         }
-
-        h1 { 
-            font-size: 26px; 
-            margin-bottom: 10px; 
-            letter-spacing: 1px;
+        .post-mockup {
+            padding: 15px; border-bottom: 1px solid var(--border);
+            display: flex; gap: 12px;
         }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: #333; flex-shrink: 0; }
+        .post-content { flex: 1; }
+        .post-user { font-weight: bold; }
+        .post-handle { color: var(--text-dim); font-weight: normal; font-size: 14px; }
+        .post-text { margin-top: 10px; line-height: 1.4; }
         
-        .descripcion {
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 35px;
-            color: #d1d8e0;
-        }
-
-        /* Botones dinámicos blancos */
-        .btn-link {
-            background-color: #ffffff;
-            color: #1a2a3a;
-            display: block;
-            padding: 16px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            text-transform: uppercase;
+        /* ESTÉTICA SLER DENTRO DEL POST */
+        .sler-preview {
+            margin-top: 15px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            background: #000;
+            font-family: 'Consolas', monospace;
             font-size: 14px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            border: none;
         }
 
-        .btn-link:hover {
-            transform: translateY(-3px);
-            background-color: #e2e8f0;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+        /* COLUMNA DERECHA: TENDENCIAS / INFO */
+        .info-col {
+            padding: 10px 20px;
         }
+        .search-box {
+            background: #202327; border-radius: 9999px; padding: 10px 20px;
+            margin-bottom: 20px; color: var(--text-dim);
+        }
+        .trending-box {
+            background: var(--card); border-radius: 16px; padding: 15px;
+        }
+        .trend-item { margin-bottom: 15px; cursor: pointer; }
+        .trend-label { font-size: 13px; color: var(--text-dim); }
+        .trend-name { font-weight: bold; margin-top: 2px; }
 
-        .footer {
-            margin-top: 50px;
-            font-size: 11px;
-            letter-spacing: 0.5px;
-            color: #94a3b8;
-        }
+        @media (max-width: 1000px) { .layout { grid-template-columns: 80px 1fr; } .info-col { display: none; } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo-box">S</div>
-        
-        <h1>SISTEMA SLER</h1>
-        <p class="descripcion">
-            Un sistema para transformar la experiencia de lectura y escritura. <br>
-            Desarrollado por Jonatan Ribot.
-        </p>
+    <div class="layout">
+        <nav class="nav-col">
+            <div class="logo-s">S</div>
+            <div class="nav-item">🏠 Inicio</div>
+            <div class="nav-item">🔍 Explorar</div>
+            <div class="nav-item">📖 Biblioteca</div>
+            <div class="nav-item">⚙️ Configuración</div>
+        </nav>
 
-        <a href="https://sler13.blogspot.com" class="btn-link">Blog Oficial</a>
-        <a href="https://jonatan823.github.io/Sler-V2-Engine/" class="btn-link">Conversor SLER V2</a>
-        
-        <a href="https://www.instagram.com/TU_USUARIO" class="btn-link">Instagram del Proyecto</a>
-        <a href="https://www.amazon.com/TU_LIBRO" class="btn-link">Libro en Amazon</a>
+        <main class="feed-col">
+            <div class="feed-header">Sistemas SLER Oficial</div>
+            
+            <div class="post-mockup">
+                <div class="avatar" style="background: url('https://via.placeholder.com/48') center/cover;"></div>
+                <div class="post-content">
+                    <div class="post-user">Ribot Jonatan <span class="post-handle">@sler_engine · 2026</span></div>
+                    <div class="post-text">
+                        Validando la isometría de caracteres en el nodo central. El sistema de lectura recíproca no es solo un método, es la evolución del procesamiento visual.
+                    </div>
+                    <div class="sler-preview">
+                        <div style="color:#00ffcc; text-align:left; border-left: 3px solid #1d9bf0; padding-left:10px;">
+                            ESTA ES UNA VISTA PARCIAL-
+                        </div>
+                        <div style="color:#fff; text-align:right; border-right: 3px solid #ffca28; padding-right:10px; margin-top:5px;">
+                            -DEL SISTEMA DE CONTROL.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
 
-        <div class="footer">
-            © 2026 BELL VILLE, ARGENTINA. PROPIEDAD INTELECTUAL REGISTRADA.
-        </div>
+        <aside class="info-col">
+            <div class="search-box">Buscar en SLER</div>
+            <div class="trending-box">
+                <h2 style="font-size: 20px; margin-bottom: 15px;">¿Qué está pasando?</h2>
+                <div class="trend-item">
+                    <div class="trend-label">Tecnología · Tendencia</div>
+                    <div class="trend-name">#NeurocienciaAplicada</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-label">Propiedad Intelectual</div>
+                    <div class="trend-name">Copyright 2025 Argentina</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-label">Salud</div>
+                    <div class="trend-name">Hospital José A. Ceballos</div>
+                </div>
+            </div>
+        </aside>
     </div>
 
 </body>
