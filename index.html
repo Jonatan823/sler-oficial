@@ -6,21 +6,11 @@
     <title>SLER | Nodo Central Bell Ville</title>
     <style>
         :root {
-            /* Identidad: Marino Técnico */
-            --bg: #041625;           /* Azul marino profundo */
-            --card: #0a2438;         /* Tono océano para paneles */
-            --accent: #0ea5e9;       /* Celeste brillante para interactividad */
-            --border: #1e3a53;       /* Azul acero para bordes */
-            --text-main: #f0f9ff;    /* Blanco con matiz celeste */
-            --text-dim: #7dd3fc;     /* Celeste suave para datos */
-            
-            /* Colores SLER (Originales) */
-            --sler-turq: #00ffcc;    
-            --sler-gold: #fde047;
-
-            /* Modo Test */
-            --test-bg: #ffffff;
-            --test-text: #000000;
+            --bg: #041625;           --card: #0a2438;         
+            --accent: #0ea5e9;       --border: #1e3a53;       
+            --text-main: #f0f9ff;    --text-dim: #7dd3fc;     
+            --sler-turq: #00ffcc;    --sler-gold: #fde047;
+            --test-bg: #ffffff;      --test-text: #000000;
         }
 
         body, html {
@@ -28,90 +18,78 @@
             background-color: var(--bg);
             color: var(--text-main);
             font-family: 'Segoe UI', system-ui, sans-serif;
-            height: 100vh;
-            overflow: hidden;
+            height: 100vh; overflow: hidden;
         }
 
         .layout {
             display: grid;
-            grid-template-columns: 275px 1fr 350px;
+            grid-template-columns: 275px 1fr 300px; /* Ajuste de columnas para equilibrio */
             height: 100vh;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
-        /* COLUMNA IZQUIERDA: NAVEGACIÓN */
+        /* COLUMNA IZQUIERDA: CONECTIVIDAD */
         .nav-col {
             border-right: 1px solid var(--border);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            padding: 25px;
+            display: flex; flex-direction: column; gap: 15px;
         }
         .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); margin-bottom: 30px; letter-spacing: -2px; }
+        
+        .nav-group-label { font-size: 10px; font-weight: 800; color: var(--border); text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; }
+
         .nav-item {
-            padding: 12px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 500;
-            color: var(--text-dim);
+            padding: 12px 15px; border-radius: 8px;
+            cursor: pointer; transition: 0.3s;
+            font-weight: 500; color: var(--text-dim);
+            text-decoration: none; display: block;
         }
-        .nav-item:hover { background: var(--card); color: var(--accent); }
+        .nav-item:hover { background: var(--card); color: var(--accent); transform: translateX(5px); }
         .nav-active { background: var(--card); color: var(--accent); border-left: 4px solid var(--accent); }
 
-        /* COLUMNA CENTRAL: FEED / TESTS */
+        /* COLUMNA CENTRAL: APP Y NODO */
         .main-col {
             border-right: 1px solid var(--border);
             overflow-y: auto;
             background: linear-gradient(180deg, #041625 0%, #061e31 100%);
-        }
-        .header-main {
             padding: 20px;
-            border-bottom: 1px solid var(--border);
-            background: rgba(4, 22, 37, 0.9);
-            backdrop-filter: blur(12px);
-            position: sticky; top: 0; z-index: 10;
         }
+        
+        /* TARJETA DE ACCESO APP (Centro) */
+        .app-hero {
+            background: linear-gradient(45deg, #0a2438, #1e3a53);
+            border-radius: 20px; border: 2px solid var(--accent);
+            padding: 40px; text-align: center;
+            margin: 20px 0; position: relative; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .app-hero h3 { color: var(--sler-turq); font-size: 24px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 4px; }
+        .btn-launch {
+            background: var(--accent); color: white;
+            padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; text-decoration: none;
+            display: inline-block; transition: 0.3s;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+        .btn-launch:hover { transform: scale(1.05); background: white; color: var(--bg); }
 
-        /* SECCIÓN TEST (BLANCO PURO) */
-        .test-zone {
-            background-color: var(--test-bg);
-            color: var(--test-text);
-            margin: 40px;
-            padding: 60px;
-            border-radius: 4px;
-            min-height: 450px;
-            display: none;
-            flex-direction: column;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-        }
-        .sler-row {
-            font-family: 'Consolas', monospace;
-            font-size: 20px;
-            font-weight: bold;
-            margin: 10px 0;
-            letter-spacing: 0.5px;
-        }
-        .m-line { text-align: left; border-left: 6px solid #000; padding-left: 20px; }
-        .c-line { text-align: right; border-right: 6px solid #000; padding-right: 20px; }
-
-        /* COLUMNA DERECHA: REFERENCIAS (BORRADAS RECUPERADAS) */
+        /* COLUMNA DERECHA: UTILIDADES */
         .side-col { padding: 25px; display: flex; flex-direction: column; gap: 20px; }
+        
         .box-info {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border);
+            background: var(--card); border-radius: 12px;
+            padding: 20px; border: 1px solid var(--border);
+            transition: 0.3s; cursor: pointer;
         }
-        .trend-tag { color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+        .box-info:hover { border-color: var(--accent); background: rgba(14, 165, 233, 0.05); }
+        .trend-tag { color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
 
-        .btn-test {
-            background: #000; color: #fff;
-            border: none; padding: 15px 40px;
-            font-weight: bold; cursor: pointer;
-            margin-top: 40px; align-self: center;
-            text-transform: uppercase;
+        /* SECCIÓN TEST */
+        .test-zone {
+            background-color: var(--test-bg); color: var(--test-text);
+            margin: 20px; padding: 40px; border-radius: 8px;
+            display: none; flex-direction: column;
         }
     </style>
 </head>
@@ -120,49 +98,59 @@
     <div class="layout">
         <nav class="nav-col">
             <div class="logo-s">SLER</div>
+            
+            <div class="nav-group-label">Navegación</div>
             <div class="nav-item nav-active" onclick="switchTab('feed')">🏠 Inicio</div>
-            <div class="nav-item" onclick="switchTab('test')">🔬 Laboratorio Test</div>
-            <div class="nav-item">📖 Publicaciones</div>
             <div class="nav-item">⚙️ Nodo Central</div>
+            
+            <div class="nav-group-label">Contenido</div>
+            <a href="#" class="nav-item">📖 Blog de Lectura</a>
+            <a href="#" class="nav-item">📚 Publicaciones</a>
+            
+            <div class="nav-group-label">Comunidad</div>
+            <a href="#" class="nav-item">📷 Instagram</a>
+            <a href="#" class="nav-item">👤 Facebook</a>
         </nav>
 
         <main class="main-col">
-            <div class="header-main">
-                <h2 id="title-display" style="margin:0; font-size: 18px; color: var(--accent);">Control Neurálgico</h2>
-            </div>
+            <div id="section-feed">
+                <div class="app-hero">
+                    <div style="font-size: 50px; margin-bottom: 10px;">⚡</div>
+                    <h3>S.L.E.R. Workstation</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 25px;">Sistema de Lectura y Escritura Recíproco.<br>Procesamiento isométrico de alta precisión.</p>
+                    <a href="https://jonatan823.github.io/sler-App.html/" target="_blank" class="btn-launch">ACCEDER A LA APP</a>
+                </div>
 
-            <div id="section-feed" style="padding: 20px;">
-                <div style="background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid var(--border);">
-                    <div class="trend-tag">ESTADO DEL NODO: ONLINE</div>
-                    <p style="margin-top:10px; line-height:1.6;">Bienvenido, Ribot. El sistema está configurado para la visualización parcial. Las referencias de hardware y geolocalización han sido vinculadas exitosamente.</p>
+                <div style="background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid var(--border); margin-top: 20px;">
+                    <div class="trend-tag">Estado del Sistema</div>
+                    <p style="margin-top:10px; font-size: 14px; line-height:1.6; color: var(--text-main);">
+                        Nodo Bell Ville activo. Registro IP 2025 vinculado. [cite: 2026-01-10]
+                    </p>
                 </div>
             </div>
 
             <div id="section-test" class="test-zone">
-                <div style="text-align: center; color: #999; font-size: 11px; margin-bottom: 50px; letter-spacing: 3px;">MÉTRICA DE ISOMETRÍA v1.0</div>
-                <div class="sler-row m-line">EL DESARROLLO DE LA NEUROCIEN-</div>
-                <div class="sler-row c-line">.CIA APLICADA A LA LECTURA RÁPI</div>
-                <div class="sler-row m-line">DA REQUIERE UNA PRECISIÓN MILI-</div>
-                <div class="sler-row c-line">.MÉTRICA ESPECIALMENTE CUANDO</div>
-                <button class="btn-test" onclick="alert('Métrica de Bell Ville Registrada')">Finalizar Test</button>
+                <div style="text-align: center; color: #999; font-size: 11px; margin-bottom: 30px;">MÉTRICA DE ISOMETRÍA</div>
+                <button onclick="switchTab('feed')" style="background:#000; color:#fff; border:none; padding:10px; cursor:pointer;">Cerrar Test</button>
             </div>
         </main>
 
         <aside class="side-col">
-            <div class="box-info">
-                <div class="trend-tag">PROPIEDAD INTELECTUAL</div>
-                <p style="font-size: 14px; margin-top:8px;">Software Registrado (2025)<br>Autor: Ribot Jonatan</p>
-                <p style="font-size: 12px; color: var(--text-dim);">Bell Ville, Córdoba, AR.</p>
+            <div class="box-info" onclick="switchTab('test')">
+                <div class="trend-tag">Laboratorio</div>
+                <h4 style="margin: 10px 0 5px 0;">🔬 Iniciar Test</h4>
+                <p style="font-size: 12px; color: var(--text-dim);">Validar capacidad isométrica.</p>
             </div>
 
             <div class="box-info">
-                <div class="trend-tag">chat Sler</div>
-                
+                <div class="trend-tag">Comunicación</div>
+                <h4 style="margin: 10px 0 5px 0;">💬 Chat Sler</h4>
+                <p style="font-size: 12px; color: var(--text-dim);">Consultas técnicas del nodo.</p>
             </div>
 
-            <div class="box-info">
-                <div class="trend-tag">TEST SLER</div>
-                <p style="font-size: 13px; margin-top:8px;">CONTROL DE TÉCNICA</p>
+            <div class="box-info" style="margin-top: auto; opacity: 0.6;">
+                <div class="trend-tag">Legal</div>
+                <p style="font-size: 11px; margin-top:8px;">Software Registrado (2025) [cite: 2026-01-10]<br>Autor: Ribot Jonatan [cite: 2025-12-02]</p>
             </div>
         </aside>
     </div>
@@ -171,19 +159,13 @@
         function switchTab(tab) {
             const feed = document.getElementById('section-feed');
             const test = document.getElementById('section-test');
-            const title = document.getElementById('title-display');
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
-
+            
             if(tab === 'feed') {
                 feed.style.display = 'block';
                 test.style.display = 'none';
-                title.innerText = "Control Neurálgico";
-                event.currentTarget.classList.add('nav-active');
             } else {
                 feed.style.display = 'none';
                 test.style.display = 'flex';
-                title.innerText = "Laboratorio de Tests (Modo Blanco)";
-                event.currentTarget.classList.add('nav-active');
             }
         }
     </script>
