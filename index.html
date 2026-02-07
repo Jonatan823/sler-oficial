@@ -23,13 +23,12 @@
 
         .layout {
             display: grid;
-            grid-template-columns: 275px 1fr 300px; /* Ajuste de columnas para equilibrio */
+            grid-template-columns: 275px 1fr 300px; 
             height: 100vh;
             max-width: 1600px;
             margin: 0 auto;
         }
 
-        /* COLUMNA IZQUIERDA: CONECTIVIDAD */
         .nav-col {
             border-right: 1px solid var(--border);
             padding: 25px;
@@ -48,7 +47,6 @@
         .nav-item:hover { background: var(--card); color: var(--accent); transform: translateX(5px); }
         .nav-active { background: var(--card); color: var(--accent); border-left: 4px solid var(--accent); }
 
-        /* COLUMNA CENTRAL: APP Y NODO */
         .main-col {
             border-right: 1px solid var(--border);
             overflow-y: auto;
@@ -56,7 +54,6 @@
             padding: 20px;
         }
         
-        /* TARJETA DE ACCESO APP (Centro) */
         .app-hero {
             background: linear-gradient(45deg, #0a2438, #1e3a53);
             border-radius: 20px; border: 2px solid var(--accent);
@@ -74,18 +71,16 @@
         }
         .btn-launch:hover { transform: scale(1.05); background: white; color: var(--bg); }
 
-        /* COLUMNA DERECHA: UTILIDADES */
         .side-col { padding: 25px; display: flex; flex-direction: column; gap: 20px; }
         
         .box-info {
             background: var(--card); border-radius: 12px;
             padding: 20px; border: 1px solid var(--border);
-            transition: 0.3s; cursor: pointer;
+            transition: 0.3s; cursor: pointer; text-decoration: none; color: inherit;
         }
         .box-info:hover { border-color: var(--accent); background: rgba(14, 165, 233, 0.05); }
         .trend-tag { color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* SECCIÓN TEST */
         .test-zone {
             background-color: var(--test-bg); color: var(--test-text);
             margin: 20px; padding: 40px; border-radius: 8px;
@@ -104,12 +99,12 @@
             <div class="nav-item">⚙️ Nodo Central</div>
             
             <div class="nav-group-label">Contenido</div>
-            <a href="#" class="nav-item">📖 Blog de Lectura</a>
-            <a href="#" class="nav-item">📚 Publicaciones</a>
+            <a href="https://www.blogger.com/profile/13812852654325880479" target="_blank" class="nav-item">📖 Blog de Lectura</a>
+            <a href="https://www.amazon.com/dp/B0DSY4WJ3L" target="_blank" class="nav-item">📚 Publicaciones</a>
             
             <div class="nav-group-label">Comunidad</div>
-            <a href="#" class="nav-item">📷 Instagram</a>
-            <a href="#" class="nav-item">👤 Facebook</a>
+            <a href="https://www.facebook.com/share/p/1DAt4m2WYP/" target="_blank" class="nav-item">👤 Facebook</a>
+            <a href="https://www.instagram.com/sler_lectura/" target="_blank" class="nav-item">📷 Instagram</a>
         </nav>
 
         <main class="main-col">
@@ -117,21 +112,25 @@
                 <div class="app-hero">
                     <div style="font-size: 50px; margin-bottom: 10px;">⚡</div>
                     <h3>S.L.E.R. Workstation</h3>
-                    <p style="color: var(--text-dim); margin-bottom: 25px;">Sistema de Lectura y Escritura Recíproco.<br>Procesamiento isométrico de alta precisión.</p>
+                    <p style="color: var(--text-dim); margin-bottom: 25px;">Sistema de Lectura y Escritura Recíproco.<br>Aplicativo de Ejecución</p>
                     <a href="https://jonatan823.github.io/sler-App.html/" target="_blank" class="btn-launch">ACCEDER A LA APP</a>
                 </div>
 
                 <div style="background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid var(--border); margin-top: 20px;">
                     <div class="trend-tag">Estado del Sistema</div>
                     <p style="margin-top:10px; font-size: 14px; line-height:1.6; color: var(--text-main);">
-                        Nodo Bell Ville activo. Registro IP 2025 vinculado. [cite: 2026-01-10]
+                         Bell Ville. Registro IP 2025.
                     </p>
                 </div>
             </div>
 
             <div id="section-test" class="test-zone">
                 <div style="text-align: center; color: #999; font-size: 11px; margin-bottom: 30px;">MÉTRICA DE ISOMETRÍA</div>
-                <button onclick="switchTab('feed')" style="background:#000; color:#fff; border:none; padding:10px; cursor:pointer;">Cerrar Test</button>
+                <div style="font-family: 'Consolas', monospace; font-weight: bold; margin: 20px 0;">
+                    <p style="text-align: left; border-left: 4px solid black; padding-left: 10px;">PROCESANDO MASA CRÍTICA...</p>
+                    <p style="text-align: right; border-right: 4px solid black; padding-right: 10px;">...EJECUTANDO REFLEJO C-LINE</p>
+                </div>
+                <button onclick="switchTab('feed')" style="background:#000; color:#fff; border:none; padding:15px; cursor:pointer; font-weight: bold; margin-top: 20px;">CERRAR LABORATORIO</button>
             </div>
         </main>
 
@@ -142,15 +141,15 @@
                 <p style="font-size: 12px; color: var(--text-dim);">Validar capacidad isométrica.</p>
             </div>
 
-            <div class="box-info">
+            <a href="https://jonatan823.github.io/sler-Chat.html/" target="_blank" class="box-info">
                 <div class="trend-tag">Comunicación</div>
                 <h4 style="margin: 10px 0 5px 0;">💬 Chat Sler</h4>
-                <p style="font-size: 12px; color: var(--text-dim);">Consultas técnicas del nodo.</p>
-            </div>
+                <p style="font-size: 12px; color: var(--text-dim);">CHAT SLER - 2026, S.L.E.R.</p>
+            </a>
 
-            <div class="box-info" style="margin-top: auto; opacity: 0.6;">
+            <div class="box-info" style="margin-top: auto; opacity: 0.6; cursor: default;">
                 <div class="trend-tag">Legal</div>
-                <p style="font-size: 11px; margin-top:8px;">Software Registrado (2025) [cite: 2026-01-10]<br>Autor: Ribot Jonatan [cite: 2025-12-02]</p>
+                <p style="font-size: 11px; margin-top:8px;">Software Registrado (2025)<br>by Ribot Janatán</p>
             </div>
         </aside>
     </div>
@@ -159,7 +158,6 @@
         function switchTab(tab) {
             const feed = document.getElementById('section-feed');
             const test = document.getElementById('section-test');
-            
             if(tab === 'feed') {
                 feed.style.display = 'block';
                 test.style.display = 'none';
