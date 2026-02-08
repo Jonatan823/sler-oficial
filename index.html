@@ -18,156 +18,145 @@
             background-color: var(--bg);
             color: var(--text-main);
             font-family: 'Segoe UI', system-ui, sans-serif;
-            height: 100vh; overflow: hidden;
+            height: 100vh; overflow-x: hidden;
         }
 
+        /* --- LAYOUT RESPONSIVE --- */
         .layout {
             display: grid;
             grid-template-columns: 275px 1fr 300px; 
             height: 100vh;
             max-width: 1600px;
             margin: 0 auto;
+            transition: 0.3s;
         }
 
-        /* Lateral Izquierdo */
-        .nav-col {
-            border-right: 1px solid var(--border);
-            padding: 25px;
-            display: flex; flex-direction: column; gap: 10px;
-            overflow-y: auto;
-        }
-        .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); margin-bottom: 20px; letter-spacing: -2px; }
-        
-        .nav-group-label { font-size: 10px; font-weight: 800; color: var(--border); text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; margin-bottom: 5px; }
+        /* Responsive para tablets y móviles */
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr; /* Una sola columna */
+            }
+            .nav-col, .side-col {
+                display: none; /* Ocultamos laterales por defecto */
+                position: fixed;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                background: var(--bg);
+                width: 280px;
+                box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            }
+            .nav-col { left: -280px; } /* Escondido a la izquierda */
+            .side-col { right: -280px; } /* Escondido a la derecha */
+            
+            /* Clases para abrir menús */
+            .nav-open { left: 0 !important; display: flex !important; }
+            .side-open { right: 0 !important; display: flex !important; }
 
-        .nav-item {
-            padding: 10px 15px; border-radius: 8px;
-            cursor: pointer; transition: 0.3s;
-            font-weight: 500; color: var(--text-dim);
-            text-decoration: none; display: block;
-            font-size: 14px;
+            .main-col { border: none; }
+            .mobile-header { display: flex !important; }
         }
-        .nav-item:hover { background: var(--card); color: var(--accent); transform: translateX(5px); }
+
+        /* --- COMPONENTES --- */
+        .mobile-header {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-col { border-right: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+        .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); letter-spacing: -2px; }
+        .nav-group-label { font-size: 10px; font-weight: 800; color: var(--border); text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; }
+        .nav-item { padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 500; color: var(--text-dim); text-decoration: none; display: block; }
         .nav-active { background: var(--card); color: var(--accent); border-left: 4px solid var(--accent); }
 
-        /* Columna Central */
-        .main-col {
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            background: linear-gradient(180deg, #041625 0%, #061e31 100%);
-            padding: 20px;
-        }
-        
-        .app-hero {
-            background: linear-gradient(45deg, #0a2438, #1e3a53);
-            border-radius: 20px; border: 2px solid var(--accent);
-            padding: 40px; text-align: center;
-            margin: 20px 0; position: relative; overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .app-hero h3 { color: var(--sler-turq); font-size: 24px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 4px; }
-        .btn-launch {
-            background: var(--accent); color: white;
-            padding: 15px 40px; border-radius: 50px;
-            font-weight: bold; text-decoration: none;
-            display: inline-block; transition: 0.3s;
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
-        }
-        .btn-launch:hover { transform: scale(1.05); background: white; color: var(--bg); }
+        .main-col { overflow-y: auto; background: linear-gradient(180deg, #041625 0%, #061e31 100%); padding: 20px; }
+        .app-hero { background: linear-gradient(45deg, #0a2438, #1e3a53); border-radius: 20px; border: 2px solid var(--accent); padding: 30px; text-align: center; margin: 10px 0; }
+        .app-hero h3 { color: var(--sler-turq); font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-launch { background: var(--accent); color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; text-decoration: none; display: inline-block; }
 
-        /* Lateral Derecho */
         .side-col { padding: 25px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-        
-        .box-info {
-            background: var(--card); border-radius: 12px;
-            padding: 20px; border: 1px solid var(--border);
-            transition: 0.3s; cursor: pointer; text-decoration: none; color: inherit;
-        }
-        .box-info:hover { border-color: var(--accent); background: rgba(14, 165, 233, 0.05); }
-        .trend-tag { color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+        .box-info { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); text-decoration: none; color: inherit; }
+        .trend-tag { color: var(--accent); font-size: 11px; font-weight: bold; text-transform: uppercase; }
 
-        /* Zona de Test */
-        .test-zone {
-            background-color: var(--test-bg); color: var(--test-text);
-            margin: 20px; padding: 40px; border-radius: 8px;
-            display: none; flex-direction: column;
-        }
+        .test-zone { background-color: var(--test-bg); color: var(--test-text); margin: 10px; padding: 20px; border-radius: 8px; display: none; flex-direction: column; }
     </style>
 </head>
 <body>
 
-    <div class="layout">
-        <nav class="nav-col">
+    <div class="mobile-header">
+        <button onclick="toggleNav()" style="background:none; border:none; color:var(--accent); font-size:24px;">☰</button>
+        <div class="logo-s" style="font-size: 20px; margin:0;">SLER</div>
+        <button onclick="toggleSide()" style="background:none; border:none; color:var(--accent); font-size:24px;">⚙️</button>
+    </div>
+
+    <div class="layout" id="main-layout">
+        <nav class="nav-col" id="nav-col">
             <div class="logo-s">SLER</div>
-            
             <div class="nav-group-label">Navegación</div>
-            <div class="nav-item nav-active" onclick="switchTab('feed')">🏠 Inicio</div>
-            <div class="nav-item">⚙️ Nodo Central</div>
-            
+            <div class="nav-item nav-active" onclick="closeMenus(); switchTab('feed')">🏠 Inicio</div>
             <div class="nav-group-label">Contenido</div>
             <a href="https://sler13.blogspot.com" target="_blank" class="nav-item">📖 Blog SLER</a>
-            <a href="https://www.amazon.com/S-L-E-R-Sistema-Lectura-Escritura-Rec%C3%ADproca-ebook/dp/B0DW5CLB55" target="_blank" class="nav-item">📚 Libro en Amazon</a>
+            <a href="https://www.amazon.com/dp/B0DW5CLB55" target="_blank" class="nav-item">📚 Libro Amazon</a>
             <a href="https://books.google.com.ar/books?id=Ui1KEQAAQBAJ" target="_blank" class="nav-item">🌐 Google Libros</a>
-            
-            <div class="nav-group-label">Comunidad</div>
-            <a href="https://www.facebook.com/share/p/1DAt4m2WYP/" target="_blank" class="nav-item">👤 Facebook</a>
-            <a href="https://www.instagram.com/sler_lectura/" target="_blank" class="nav-item">📷 Instagram</a>
         </nav>
 
         <main class="main-col">
             <div id="section-feed">
                 <div class="app-hero">
-                    <div style="font-size: 50px; margin-bottom: 10px;">⚡</div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">⚡</div>
                     <h3>S.L.E.R. Workstation</h3>
-                    <p style="color: var(--text-dim); margin-bottom: 25px;">Sistema de Lectura y Escritura Recíproco.<br>Aplicativo de Ejecución</p>
+                    <p style="color: var(--text-dim); margin-bottom: 20px; font-size: 14px;">Sistema de Lectura y Escritura Recíproco.</p>
                     <a href="https://jonatan823.github.io/sler-App.html/" target="_blank" class="btn-launch">ACCEDER A LA APP</a>
                 </div>
-
-                <div style="background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid var(--border); margin-top: 20px;">
+                <div style="background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
                     <div class="trend-tag">Estado del Sistema</div>
-                    <p style="margin-top:10px; font-size: 14px; line-height:1.6; color: var(--text-main);">
-                         Bell Ville. Registro IP 2025.
-                    </p>
+                    <p style="margin-top:10px; font-size: 13px; line-height:1.6; color: var(--text-main);">Bell Ville. Registro IP 2025.</p>
                 </div>
             </div>
 
             <div id="section-test" class="test-zone">
-                <div style="text-align: center; color: #999; font-size: 11px; margin-bottom: 30px;">MÉTRICA DE ISOMETRÍA</div>
-                <div style="font-family: 'Consolas', monospace; font-weight: bold; margin: 20px 0;">
-                    <p style="text-align: left; border-left: 4px solid black; padding-left: 10px;">PROCESANDO MASA CRÍTICA...</p>
-                    <p style="text-align: right; border-right: 4px solid black; padding-right: 10px;">...EJECUTANDO REFLEJO C-LINE</p>
+                <div style="text-align: center; color: #999; font-size: 11px; margin-bottom: 20px;">MÉTRICA DE ISOMETRÍA</div>
+                <div style="font-family: 'Consolas', monospace; font-weight: bold; font-size: 13px;">
+                    <p>PROCESANDO MASA CRÍTICA...</p>
+                    <p style="text-align: right;">...EJECUTANDO REFLEJO C-LINE</p>
                 </div>
-                <button onclick="switchTab('feed')" style="background:#000; color:#fff; border:none; padding:15px; cursor:pointer; font-weight: bold; margin-top: 20px;">CERRAR LABORATORIO</button>
+                <button onclick="switchTab('feed')" style="background:#000; color:#fff; border:none; padding:15px; cursor:pointer; font-weight: bold; margin-top: 20px;">CERRAR</button>
             </div>
         </main>
 
-        <aside class="side-col">
-            <div class="box-info" onclick="switchTab('test')">
+        <aside class="side-col" id="side-col">
+            <div class="box-info" onclick="closeMenus(); switchTab('test')">
                 <div class="trend-tag">Laboratorio</div>
-                <h4 style="margin: 10px 0 5px 0;">🔬 Iniciar Test</h4>
+                <h4 style="margin: 5px 0;">🔬 Iniciar Test</h4>
                 <p style="font-size: 12px; color: var(--text-dim);">Validar capacidad isométrica.</p>
             </div>
-
             <a href="https://jonatan823.github.io/ChatSler/" target="_blank" class="box-info">
                 <div class="trend-tag">Comunicación</div>
-                <h4 style="margin: 10px 0 5px 0;">💬 Chat Sler</h4>
-                <p style="font-size: 12px; color: var(--text-dim);">CHAT SLER - 2026, S.L.E.R.</p>
+                <h4 style="margin: 5px 0;">💬 Chat Sler</h4>
+                <p style="font-size: 12px; color: var(--text-dim);">CHAT SLER - 2026</p>
             </a>
-
             <a href="https://chromewebstore.google.com/detail/dgildmjcbnjhpbblclglkcfhoheifilb" target="_blank" class="box-info">
                 <div class="trend-tag">Navegador</div>
-                <h4 style="margin: 10px 0 5px 0;">🧩 Extensión Chrome</h4>
-                <p style="font-size: 12px; color: var(--text-dim);">Instalar Plugin SLER.</p>
+                <h4 style="margin: 5px 0;">🧩 Extensión Chrome</h4>
             </a>
-
-            <div class="box-info" style="margin-top: auto; opacity: 0.6; cursor: default;">
-                <div class="trend-tag">Legal</div>
-                <p style="font-size: 11px; margin-top:8px;">Software Registrado (2025)<br>by Ribot Jonatán</p>
+            <div class="box-info" style="margin-top: auto; opacity: 0.6;">
+                <p style="font-size: 10px;">Software Registrado © 2025<br>Ribot Jonatán</p>
             </div>
         </aside>
     </div>
 
     <script>
+        function toggleNav() { document.getElementById('nav-col').classList.toggle('nav-open'); }
+        function toggleSide() { document.getElementById('side-col').classList.toggle('side-open'); }
+        function closeMenus() { 
+            document.getElementById('nav-col').classList.remove('nav-open');
+            document.getElementById('side-col').classList.remove('side-open');
+        }
+
         function switchTab(tab) {
             const feed = document.getElementById('section-feed');
             const test = document.getElementById('section-test');
