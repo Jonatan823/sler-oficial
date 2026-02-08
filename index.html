@@ -33,6 +33,7 @@
             border-right: 1px solid var(--border);
             padding: 25px;
             display: flex; flex-direction: column; gap: 15px;
+            overflow-y: auto;
         }
         .logo-s { font-size: 32px; font-weight: bold; color: var(--accent); margin-bottom: 30px; letter-spacing: -2px; }
         
@@ -71,7 +72,7 @@
         }
         .btn-launch:hover { transform: scale(1.05); background: white; color: var(--bg); }
 
-        .side-col { padding: 25px; display: flex; flex-direction: column; gap: 20px; }
+        .side-col { padding: 25px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
         
         .box-info {
             background: var(--card); border-radius: 12px;
@@ -100,7 +101,8 @@
             
             <div class="nav-group-label">Contenido</div>
             <a href="https://www.blogger.com/profile/13812852654325880479" target="_blank" class="nav-item">📖 Blog de Lectura</a>
-            <a href="https://www.amazon.com/dp/B0DSY4WJ3L" target="_blank" class="nav-item">📚 Publicaciones</a>
+            <a href="https://www.amazon.com/dp/B0DSY4WJ3L" target="_blank" class="nav-item">📚 Publicaciones Amazon</a>
+            <a href="https://books.google.com.ar/books/about/S_L_E_R.html?id=Dq43EQAAQBAJ&redir_esc=y" target="_blank" class="nav-item">🌐 Google Libros</a>
             
             <div class="nav-group-label">Comunidad</div>
             <a href="https://www.facebook.com/share/p/1DAt4m2WYP/" target="_blank" class="nav-item">👤 Facebook</a>
@@ -147,9 +149,15 @@
                 <p style="font-size: 12px; color: var(--text-dim);">CHAT SLER - 2026, S.L.E.R.</p>
             </a>
 
+            <a href="https://chromewebstore.google.com/detail/dgildmjcbnjhpbblclglkcfhoheifilb?utm_source=item-share-cb" target="_blank" class="box-info">
+                <div class="trend-tag">Navegador</div>
+                <h4 style="margin: 10px 0 5px 0;">🧩 Extensión Chrome</h4>
+                <p style="font-size: 12px; color: var(--text-dim);">S.L.E.R. Plugin para Chrome.</p>
+            </a>
+
             <div class="box-info" style="margin-top: auto; opacity: 0.6; cursor: default;">
                 <div class="trend-tag">Legal</div>
-                <p style="font-size: 11px; margin-top:8px;">Software Registrado (2025)<br>by Ribot Janatán</p>
+                <p style="font-size: 11px; margin-top:8px;">Software Registrado (2025)<br>by Ribot Jonatán</p>
             </div>
         </aside>
     </div>
