@@ -6,10 +6,16 @@
     <title>SLER | Nodo Central</title>
     <style>
         :root {
-            --bg: #041625;           --card: #0a2438;         
-            --accent: #0ea5e9;       --border: #1e3a53;       
-            --text-main: #f0f9ff;    --text-dim: #7dd3fc;
+            --bg: #041625;            
+            --card: #0a2438;          
+            --accent: #0ea5e9;        
+            --border: #1e3a53;        
+            --text-main: #f0f9ff;     
+            --text-dim: #7dd3fc;
             --sler-turq: #00ffcc;
+            --sler-gold: #fde047;
+            --success: #10b981;
+            --error: #f43f5e;
         }
 
         body, html {
@@ -76,10 +82,66 @@
             color: white;
             transition: 0.2s;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer;
         }
         .module-card:hover { border-color: var(--accent); transform: translateY(-3px); }
         .module-icon { font-size: 28px; margin-bottom: 10px; }
         .module-title { font-size: 13px; font-weight: 600; color: var(--text-dim); }
+
+        /* MODAL DE REGISTRO / CURSO */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 22, 37, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-card {
+            background: var(--card);
+            border: 1px solid var(--sler-turq);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none; border: none;
+            color: var(--text-dim); font-size: 20px;
+            cursor: pointer;
+        }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label {
+            display: block; font-size: 11px; font-weight: bold;
+            color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px;
+        }
+        .form-control {
+            width: 100%; background: var(--bg);
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 10px; color: white; font-size: 14px;
+            box-sizing: border-box; outline: none;
+        }
+        .form-control:focus { border-color: var(--accent); }
+        .pin-input { text-align: center; font-family: monospace; font-size: 20px; letter-spacing: 5px; }
+        .btn-action {
+            width: 100%; background: var(--accent);
+            color: white; border: none; padding: 12px;
+            border-radius: 50px; font-weight: bold; cursor: pointer;
+            margin-top: 10px; text-transform: uppercase; font-size: 12px;
+        }
+        .alert-box {
+            padding: 10px; border-radius: 8px; font-size: 12px;
+            text-align: center; margin-top: 12px; display: none;
+        }
+        .alert-success { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--success); color: var(--sler-turq); }
+        .alert-error { background: rgba(244, 63, 94, 0.2); border: 1px solid var(--error); color: var(--error); }
+        .hidden { display: none !important; }
 
         /* AJUSTE PARA ESCRITORIO */
         @media (min-width: 801px) {
@@ -111,6 +173,12 @@
         </div>
 
         <div class="module-grid">
+            <!-- MÓDULO NUEVO: CURSO CON REGISTRO Y PIN -->
+            <div class="module-card" onclick="abrirModalCurso()" style="border-color: var(--sler-turq);">
+                <div class="module-icon">🎓</div>
+                <div class="module-title" style="color: var(--sler-turq);">Curso SLER</div>
+            </div>
+
             <a href="https://jonatan823.github.io/ChatSler/" target="_blank" class="module-card">
                 <div class="module-icon">🔬</div>
                 <div class="module-title">Iniciar Test</div>
@@ -147,5 +215,98 @@
         </div>
     </div>
 
+    <!-- MODAL DE INSCRIPCIÓN Y ACTIVACIÓN -->
+    <div id="modal-curso" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button class="close-modal" onclick="cerrarModalCurso()">×</button>
+            
+            <!-- ETAPA 1: REGISTRO -->
+            <div id="paso-registro">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="color: var(--sler-turq); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ACCESO A MÓDULO</span>
+                    <h3 style="margin: 5px 0; color: white;">Curso de Lectura SLER</h3>
+                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Ingresa tus datos para habilitar el PIN de entrada.</p>
+                </div>
+
+                <form onsubmit="procesarInscripcion(event)">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="nombre" class="form-control" placeholder="Ej: Jonatan Ribot" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="email" class="form-control" placeholder="tu@email.com" required>
+                    </div>
+                    <button type="submit" class="btn-action">REGISTRAR Y CONTINUAR</button>
+                </form>
+            </div>
+
+            <!-- ETAPA 2: VALIDACIÓN DE PIN -->
+            <div id="paso-pin" class="hidden">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="color: var(--sler-gold); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ACTIVACIÓN DE LICENCIA</span>
+                    <h3 style="margin: 5px 0; color: white;">Ingrese su Código PIN</h3>
+                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Introduce el código para iniciar la sesión.</p>
+                </div>
+
+                <div class="form-group">
+                    <label style="text-align: center;">Clave PIN</label>
+                    <input type="text" id="pin-ingresado" class="form-control pin-input" placeholder="000000" maxlength="8">
+                </div>
+
+                <div id="msg-alert" class="alert-box"></div>
+
+                <button onclick="validarPin()" class="btn-action" style="background: var(--sler-turq); color: #041625;">ACTIVAR E INGRESAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PIN_GENERICO = "123456";
+
+        function abrirModalCurso() {
+            document.getElementById('modal-curso').classList.remove('hidden');
+        }
+
+        function cerrarModalCurso() {
+            document.getElementById('modal-curso').classList.add('hidden');
+            document.getElementById('paso-registro').classList.remove('hidden');
+            document.getElementById('paso-pin').classList.add('hidden');
+            document.getElementById('msg-alert').style.display = 'none';
+        }
+
+        function procesarInscripcion(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+
+            localStorage.setItem('sler_usuario', nombre);
+            localStorage.setItem('sler_email', email);
+
+            document.getElementById('paso-registro').classList.add('hidden');
+            document.getElementById('paso-pin').classList.remove('hidden');
+        }
+
+        function validarPin() {
+            const pinInput = document.getElementById('pin-ingresado').value.trim();
+            const alertBox = document.getElementById('msg-alert');
+
+            if (pinInput === PIN_GENERICO) {
+                alertBox.className = "alert-box alert-success";
+                alertBox.innerText = "¡Clave correcta! Entrando al curso...";
+                alertBox.style.display = "block";
+
+                localStorage.setItem('sler_acceso_concedido', 'true');
+
+                setTimeout(() => {
+                    window.location.href = "index.html"; // Redirección al curso
+                }, 1200);
+            } else {
+                alertBox.className = "alert-box alert-error";
+                alertBox.innerText = "PIN incorrecto. Intenta nuevamente.";
+                alertBox.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
