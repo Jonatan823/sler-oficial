@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SLER | Nodo Central</title>
@@ -69,7 +69,7 @@
         /* GRILLA DE MÓDULOS TIPO APP */
         .module-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Dos columnas en móvil */
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
 
@@ -262,9 +262,11 @@
         </div>
     </div>
 
-   <script>
+    <script>
         // Inicializar EmailJS con tu clave pública
-        emailjs.init("RGyyCWtGRtZXitRqe");
+        emailjs.init({
+            publicKey: "RGyyCWtGRtZXitRqe",
+        });
 
         const PIN_GENERICO = "123456";
 
@@ -294,17 +296,18 @@
                 pin_code: PIN_GENERICO
             };
 
-            // Envío del correo con EmailJS
-          emailjs.send("service_9p83cnf", "vvzx8af", parametrosEmail)
-                .then(function(respuesta) {
-                    console.log("PIN enviado con éxito:", respuesta.status);
-                }, function(error) {
-                    console.error("Error al enviar el PIN:", error);
-                });
-
-            // Cambiar pantalla para pedir el PIN
+            // Cambiar a pantalla de PIN
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
+
+            // Envío del correo con EmailJS
+            emailjs.send("service_9p83cnf", "vvzx8af", parametrosEmail, "RGyyCWtGRtZXitRqe")
+                .then(function(respuesta) {
+                    console.log("PIN enviado con éxito:", respuesta.status, respuesta.text);
+                }, function(error) {
+                    console.error("Error al enviar el PIN:", error);
+                    alert("Error EmailJS: " + JSON.stringify(error));
+                });
         }
 
         function validarPin() {
