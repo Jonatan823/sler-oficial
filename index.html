@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SLER | Nodo Central</title>
@@ -261,7 +262,10 @@
         </div>
     </div>
 
-    <script>
+   <script>
+        // Inicializar EmailJS con tu clave pública
+        emailjs.init("RGyyCWtGRtZXitRqe");
+
         const PIN_GENERICO = "123456";
 
         function abrirModalCurso() {
@@ -283,6 +287,22 @@
             localStorage.setItem('sler_usuario', nombre);
             localStorage.setItem('sler_email', email);
 
+            // Parámetros para la plantilla de correo
+            const parametrosEmail = {
+                user_name: nombre,
+                user_email: email,
+                pin_code: PIN_GENERICO
+            };
+
+            // Envío del correo con EmailJS
+          emailjs.send("service_9p83cnf", "vvzx8af", parametrosEmail)
+                .then(function(respuesta) {
+                    console.log("PIN enviado con éxito:", respuesta.status);
+                }, function(error) {
+                    console.error("Error al enviar el PIN:", error);
+                });
+
+            // Cambiar pantalla para pedir el PIN
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
         }
@@ -299,7 +319,7 @@
                 localStorage.setItem('sler_acceso_concedido', 'true');
 
                 setTimeout(() => {
-                    window.location.href = "index.html"; // Redirección al curso
+                    window.location.href = "index.html";
                 }, 1200);
             } else {
                 alertBox.className = "alert-box alert-error";
