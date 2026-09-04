@@ -290,12 +290,14 @@
             localStorage.setItem('sler_email', email);
 
             // Parámetros para la plantilla de correo
-            const parametrosEmail = {
-                user_name: nombre,
-                user_email: email,
-                pin_code: PIN_GENERICO
-            };
-
+          const parametrosEmail = {
+    user_name: nombre,
+    user_email: email,
+    to_email: email,
+    to_name: nombre,
+    reply_to: email,
+    pin_code: PIN_GENERICO
+};
             // Cambiar a pantalla de PIN
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
