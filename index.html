@@ -304,7 +304,7 @@
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
 
-          emailjs.send("service_9p83cnf", "vvzx8af", parametrosEmail, "RGyyCWtGRtZXitRqe")
+            emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosEmail, "RGyyCWtGRtZXitRqe")
                 .then(function(respuesta) {
                     console.log("PIN enviado con éxito:", respuesta.status, respuesta.text);
                 }, function(error) {
