@@ -281,23 +281,41 @@
             document.getElementById('msg-alert').style.display = 'none';
         }
 
-        function procesarInscripcion(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('nombre').value;
-            const email = document.getElementById('email').value;
+     function procesarInscripcion(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const email = document.getElementById('email').value;
 
-            localStorage.setItem('sler_usuario', nombre);
-            localStorage.setItem('sler_email', email);
+    localStorage.setItem('sler_usuario', nombre);
+    localStorage.setItem('sler_email', email);
 
-            // Parámetros para la plantilla de correo
-          const parametrosEmail = {
-    user_name: nombre,
-    user_email: email,
-    to_email: email,
-    to_name: nombre,
-    reply_to: email,
-    pin_code: PIN_GENERICO
-};
+    // Mapeo exhaustivo para plantillas OTP / Estándar de EmailJS
+    const parametrosEmail = {
+        user_name: nombre,
+        user_email: email,
+        to_email: email,
+        to_name: nombre,
+        email: email,
+        recipient: email,
+        reply_to: email,
+        passcode: PIN_GENERICO,
+        pin_code: PIN_GENERICO,
+        message: PIN_GENERICO
+    };
+
+    // Cambiar a pantalla de PIN
+    document.getElementById('paso-registro').classList.add('hidden');
+    document.getElementById('paso-pin').classList.remove('hidden');
+
+    // Envío del correo con EmailJS
+    emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosEmail, "RGyyCWtGRtZXitRqe")
+        .then(function(respuesta) {
+            console.log("PIN enviado con éxito:", respuesta.status, respuesta.text);
+        }, function(error) {
+            console.error("Error al enviar el PIN:", error);
+            alert("Error EmailJS: " + JSON.stringify(error));
+        });
+}
             // Cambiar a pantalla de PIN
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
