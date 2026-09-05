@@ -288,7 +288,8 @@
             localStorage.setItem('sler_usuario', nombre);
             localStorage.setItem('sler_email', email);
 
-            const parametrosEmail = {
+            // 1. Parámetros para el correo que recibe el alumno
+            const parametrosAlumno = {
                 user_name: nombre,
                 user_email: email,
                 to_email: email,
@@ -301,15 +302,37 @@
                 message: PIN_GENERICO
             };
 
+            // 2. Parámetros para el correo de control (aviso de nuevo alumno para ti)
+            const parametrosControl = {
+                user_name: nombre,
+                user_email: email,
+                to_email: "joniybenji1@gmail.com", // Tu mail de control/notificaciones
+                to_name: "Administrador",
+                email: email,
+                recipient: email,
+                reply_to: email,
+                passcode: PIN_GENERICO,
+                pin_code: PIN_GENERICO,
+                message: `Nuevo registro en el curso SLER:\nNombre: ${nombre}\nCorreo: ${email}`
+            };
+
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
 
-            emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosEmail, "RGyyCWtGRtZXitRqe")
+            // Envío 1: Al alumno
+            emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosAlumno, "RGyyCWtGRtZXitRqe")
                 .then(function(respuesta) {
-                    console.log("PIN enviado con éxito:", respuesta.status, respuesta.text);
+                    console.log("PIN enviado al alumno con éxito:", respuesta.status);
                 }, function(error) {
-                    console.error("Error al enviar el PIN:", error);
-                    alert("Error EmailJS: " + JSON.stringify(error));
+                    console.error("Error al enviar el PIN al alumno:", error);
+                });
+
+            // Envío 2: Copia de control a tu casilla administrativa
+            emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosControl, "RGyyCWtGRtZXitRqe")
+                .then(function(respuesta) {
+                    console.log("Aviso de nuevo usuario enviado al admin con éxito.");
+                }, function(error) {
+                    console.error("Error al enviar aviso al admin:", error);
                 });
         }
 
