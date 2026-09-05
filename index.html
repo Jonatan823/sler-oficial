@@ -306,7 +306,7 @@
             const parametrosControl = {
                 user_name: nombre,
                 user_email: email,
-                to_email: "joniybenji1@gmail.com", // Tu mail de control/notificaciones
+                to_email: "joniybenji1@gmail.com",
                 to_name: "Administrador",
                 email: email,
                 recipient: email,
@@ -328,12 +328,13 @@
                 });
 
             // Envío 2: La alerta a tu correo de control
-            emailjs.send("service_9p83cnf", "template_9gypr28", parametrosAdmin, "RGyyCWtGRtZXitRqe")
+            emailjs.send("service_9p83cnf", "template_9gypr28", parametrosControl, "RGyyCWtGRtZXitRqe")
                 .then(function(respuesta) {
                     console.log("Aviso de nuevo cliente enviado al admin con éxito.");
                 }, function(error) {
                     console.error("Error al enviar aviso al admin:", error);
                 });
+        } // <-- ESTA LLAVE FALTABA Y ROMPÍA TODO EL SCRIPT
 
         function validarPin() {
             const pinInput = document.getElementById('pin-ingresado').value.trim();
@@ -346,8 +347,9 @@
 
                 localStorage.setItem('sler_acceso_concedido', 'true');
 
-                setTimeout(() => {window.location.href = "https://jonatan823.github.io/02_Modulo_Entrenamiento/index.html";
-                 }, 1200);
+                setTimeout(() => {
+                    window.location.href = "https://jonatan823.github.io/02_Modulo_Entrenamiento/index.html";
+                }, 1200);
             } else {
                 alertBox.className = "alert-box alert-error";
                 alertBox.innerText = "PIN incorrecto. Intenta nuevamente.";
