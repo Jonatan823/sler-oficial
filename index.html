@@ -313,26 +313,25 @@
                 });
         }
 
-        function validarPin() {
-            const pinInput = document.getElementById('pin-ingresado').value.trim();
-            const alertBox = document.getElementById('msg-alert');
+       function validarPin() {
+    const pinInput = document.getElementById('pin-ingresado').value.trim();
+    const alertBox = document.getElementById('msg-alert');
 
-            if (pinInput === PIN_GENERICO) {
-                alertBox.className = "alert-box alert-success";
-                alertBox.innerText = "¡Clave correcta! Entrando al curso...";
-                alertBox.style.display = "block";
+    if (pinInput === PIN_GENERICO) {
+        alertBox.className = "alert-box alert-success";
+        alertBox.innerText = "¡Clave correcta! Entrando al curso...";
+        alertBox.style.display = "block";
 
-                localStorage.setItem('sler_acceso_concedido', 'true');
+        localStorage.setItem('sler_acceso_concedido', 'true');
 
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1200);
-            } else {
-                alertBox.className = "alert-box alert-error";
-                alertBox.innerText = "PIN incorrecto. Intenta nuevamente.";
-                alertBox.style.display = "block";
-            }
-        }
-    </script>
+        setTimeout(() => {
+            window.location.href = "https://jonatan823.github.io/02_Modulo_Entrenamiento/";
+        }, 1200);
+    } else {
+        alertBox.className = "alert-box alert-error";
+        alertBox.innerText = "PIN incorrecto. Intenta nuevamente.";
+        alertBox.style.display = "block";
+    }
+}
 </body>
 </html>
