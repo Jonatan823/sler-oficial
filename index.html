@@ -1,373 +1,451 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SLER | Nodo Central</title>
-    <style>
-        :root {
-            --bg: #041625;            
-            --card: #0a2438;          
-            --accent: #0ea5e9;        
-            --border: #1e3a53;        
-            --text-main: #f0f9ff;     
-            --text-dim: #7dd3fc;
-            --sler-turq: #00ffcc;
-            --sler-gold: #fde047;
-            --success: #10b981;
-            --error: #f43f5e;
-        }
-
-        body, html {
-            margin: 0; padding: 0;
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            overflow-x: hidden;
-        }
-
-        .fb-header {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 2000;
-            padding: 10px 0;
-        }
-        .nav-icon {
-            font-size: 20px; color: var(--text-dim);
-            cursor: pointer; text-decoration: none;
-            padding: 10px 20px; border-radius: 10px;
-        }
-        .nav-icon.active { color: var(--accent); background: rgba(14, 165, 233, 0.1); }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        .hero-module {
-            background: linear-gradient(45deg, #0a2438, #1e3a53);
-            border-radius: 15px; border: 1px solid var(--accent);
-            padding: 30px; text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .hero-module h2 { color: var(--sler-turq); font-size: 1.2rem; letter-spacing: 2px; margin: 10px 0; }
-        .btn-main {
-            background: var(--accent); color: white;
-            padding: 12px 25px; border-radius: 50px;
-            text-decoration: none; font-weight: bold; display: inline-block;
-            margin-top: 15px; font-size: 14px;
-        }
-
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .module-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            transition: 0.2s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer;
-        }
-        .module-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-        .module-icon { font-size: 28px; margin-bottom: 10px; }
-        .module-title { font-size: 13px; font-weight: 600; color: var(--text-dim); }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 22, 37, 0.85);
-            backdrop-filter: blur(5px);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 3000;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .modal-card {
-            background: var(--card);
-            border: 1px solid var(--sler-turq);
-            border-radius: 16px;
-            padding: 25px;
-            max-width: 440px;
-            width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 20px;
-            background: none; border: none;
-            color: var(--text-dim); font-size: 20px;
-            cursor: pointer;
-        }
-        .form-group { margin-bottom: 12px; text-align: left; }
-        .form-group label {
-            display: block; font-size: 11px; font-weight: bold;
-            color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px;
-        }
-        .form-control {
-            width: 100%; background: var(--bg);
-            border: 1px solid var(--border); border-radius: 8px;
-            padding: 9px; color: white; font-size: 13px;
-            box-sizing: border-box; outline: none;
-        }
-        .form-control:focus { border-color: var(--accent); }
-        .pin-input { text-align: center; font-family: monospace; font-size: 20px; letter-spacing: 5px; }
-        .btn-action {
-            width: 100%; background: var(--sler-turq);
-            color: #041625; border: none; padding: 12px;
-            border-radius: 50px; font-weight: bold; cursor: pointer;
-            margin-top: 10px; text-transform: uppercase; font-size: 12px;
-        }
-        .price-badge {
-            background: rgba(0, 255, 204, 0.1);
-            border: 1px dashed var(--sler-turq);
-            padding: 8px; border-radius: 8px;
-            text-align: center; margin-bottom: 15px;
-            font-size: 12px; color: var(--sler-turq); font-weight: bold;
-        }
-        .alert-box {
-            padding: 10px; border-radius: 8px; font-size: 12px;
-            text-align: center; margin-top: 12px; display: none;
-        }
-        .alert-success { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--success); color: var(--sler-turq); }
-        .alert-error { background: rgba(244, 63, 94, 0.2); border: 1px solid var(--error); color: var(--error); }
-        .hidden { display: none !important; }
-
-        @media (min-width: 801px) {
-            .module-grid { grid-template-columns: repeat(3, 1fr); }
-            .container { padding: 40px; }
-        }
-
-        .status-footer {
-            margin-top: 25px; text-align: center; font-size: 11px;
-            color: var(--border); border-top: 1px solid var(--border); padding-top: 15px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>SLER - Módulo de Entrenamiento Web</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #cbd5e1; margin: 0; font-family: sans-serif; }
+    .hidden-screen { display: none !important; }
+  </style>
 </head>
-<body>
+<body class="h-screen flex flex-col justify-between p-4 overflow-hidden">
+  <!-- PANTALLA DE LOGIN PREVIO -->
+  <div id="pantalla-login" class="hidden-screen fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md w-full text-center shadow-2xl">
+      <h2 class="text-2xl font-bold text-white mb-2">Acceso a SLER</h2>
+      <p class="text-slate-400 text-sm mb-6">Ingresa tu correo y el código de activación enviado a tu e-mail para desbloquear el entrenamiento.</p>
+      
+      <input type="email" id="login-email" placeholder="tu@email.com" class="w-full mb-3 px-4 py-2 rounded bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-emerald-500" />
+      <input type="text" id="login-pin" placeholder="Código de acceso (PIN)" class="w-full mb-6 px-4 py-2 rounded bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-emerald-500 text-center font-mono tracking-widest" />
+      
+      <button onclick="validarAccesoPin()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-lg transition">INGRESAR AL CURSO</button>
+    </div>
+  </div>
 
-    <nav class="fb-header">
-        <a href="#" class="nav-icon active">🏠</a>
-        <a href="https://sler13.blogspot.com" target="_blank" class="nav-icon">📖</a>
-        <a href="https://jonatan823.github.io/ChatSler/" target="_blank" class="nav-icon">💬</a>
-        <a href="https://www.facebook.com/share/p/1DAt4m2WYP/" target="_blank" class="nav-icon">👤</a>
-    </nav>
+  <!-- 0. PANTALLA INSTITUCIONAL / ASESORÍA Y MARKETING -->
+  <div id="pantalla-presentacion" class="flex flex-col items-center justify-center flex-1 bg-slate-900 text-white rounded-lg shadow-2xl p-8 m-4 overflow-y-auto">
+    <div class="max-w-3xl w-full flex flex-col items-center text-center space-y-6">
+      
+      <div class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/30 font-bold px-4 py-1 rounded-full text-xs uppercase tracking-widest">
+        Sistema de Lectura y Escritura Recíproco (SLER)
+      </div>
 
-    <div class="container">
-        <div class="hero-module">
-            <div style="font-size: 40px;">⚡</div>
-            <h2>S.L.E.R. WORKSTATION</h2>
-            <p style="font-size: 13px; color: var(--text-dim);">Sistema de Lectura y Escritura Recíproco</p>
-            <a href="https://jonatan823.github.io/sler-App.html/" target="_blank" class="btn-main">ACCEDER A LA APP</a>
+      <h1 class="text-4xl font-black text-white tracking-tight">
+        OPTIMIZA TU VELOCIDAD Y COMPRENSIÓN LECTORA
+      </h1>
+      
+      <p class="text-slate-300 text-base leading-relaxed max-w-2xl">
+        El método SLER transforma la dinámica visual de lectura aprovechando la visión periférica y eliminando saltos sacádicos innecesarios. Este software de entrenamiento progresivo está diseñado para adaptar tu cerebro a patrones de lectura de alta eficiencia.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left my-2">
+        <div class="bg-slate-800 p-5 rounded-lg border border-slate-700">
+          <h3 class="font-bold text-yellow-400 text-sm uppercase mb-2">💡 Asesoría & Soporte Pedagógico</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Accede a guías personalizadas para implementar SLER en ámbitos académicos, docentes o profesionales.
+          </p>
         </div>
 
-        <div class="module-grid">
-            <div class="module-card" onclick="abrirModalCurso()" style="border-color: var(--sler-turq);">
-                <div class="module-icon">🎓</div>
-                <div class="module-title" style="color: var(--sler-turq);">Curso SLER</div>
-            </div>
+        <div class="bg-slate-800 p-5 rounded-lg border border-slate-700">
+          <h3 class="font-bold text-emerald-400 text-sm uppercase mb-2">🚀 Actualizaciones de la Versión</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Integración de secuencia taquistoscópica, métricas de horas de vuelo en tiempo real y arquitectura para IA.
+          </p>
+        </div>
+      </div>
 
-            <a href="https://jonatan823.github.io/ChatSler/" target="_blank" class="module-card">
-                <div class="module-icon">🔬</div>
-                <div class="module-title">Iniciar Test</div>
-            </a>
+      <button onclick="irABienvenida()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-10 rounded-lg shadow-lg text-lg transition transform active:scale-95">
+        INGRESAR AL PROGRAMA
+      </button>
 
-            <a href="https://www.amazon.com/dp/B0DW5CLB55" target="_blank" class="module-card">
-                <div class="module-icon">📚</div>
-                <div class="module-title">Libro Amazon</div>
-            </a>
+    </div>
+  </div>
 
-            <a href="https://books.google.com.ar/books?id=Ui1KEQAAQBAJ" target="_blank" class="module-card">
-                <div class="module-icon">🌐</div>
-                <div class="module-title">Google Libros</div>
-            </a>
+  <!-- 1. PANTALLA DE BIENVENIDA MINIMALISTA -->
+  <div id="pantalla-bienvenida" class="hidden-screen flex flex-col items-center justify-center flex-1 text-center bg-white rounded-lg shadow-lg p-8 m-4">
+    <h1 class="text-4xl font-extrabold text-slate-800 mb-4">ENTRENAMIENTO LECTURA SLER</h1>
+    <p class="text-slate-600 max-w-lg mb-8 text-lg">
+      Bienvenido al curso. El entrenamiento se organiza en niveles progresivos distribuidos en tandas.
+    </p>
+    <button onclick="iniciarNivel(1)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-lg shadow-md text-xl transition">
+      INICIAR CURSO
+    </button>
+  </div>
 
-            <a href="https://chromewebstore.google.com/detail/dgildmjcbnjhpbblclglkcfhoheifilb" target="_blank" class="module-card">
-                <div class="module-icon">🧩</div>
-                <div class="module-title">Extensión</div>
-            </a>
+  <!-- 1.5 PANTALLA PORTADA DE NIVEL -->
+  <div id="pantalla-portada-nivel" class="hidden-screen flex-1 flex flex-col items-center justify-center bg-slate-800 text-white rounded-lg shadow-2xl p-8 m-4">
+    <div class="max-w-xl w-full text-center space-y-6">
+      <span id="portada-tag" class="text-xs font-bold text-yellow-400 uppercase tracking-widest bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/30">
+        BLOQUE DE ENTRENAMIENTO
+      </span>
+      <h2 id="portada-titulo" class="text-4xl font-black text-white">NIVEL 1: INICIAL</h2>
+      <p id="portada-desc" class="text-slate-300 text-sm leading-relaxed">
+        Descripción del objetivo del nivel y configuración de patrones.
+      </p>
 
-            <a href="https://www.instagram.com/sler_lectura/" target="_blank" class="module-card">
-                <div class="module-icon">📷</div>
-                <div class="module-title">Instagram</div>
-            </a>
+      <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 text-left text-xs text-slate-300 space-y-2">
+        <div class="font-bold text-emerald-400 uppercase">Opciones y Actualizaciones del Nivel:</div>
+        <ul class="list-disc list-inside space-y-1 text-slate-400" id="portada-opciones">
+          <li>Secuencia silábica taquistoscópica activa.</li>
+          <li>Ajuste automático de ritmo visual.</li>
+        </ul>
+      </div>
 
-            <div class="module-card" style="opacity: 0.5; cursor: default;">
-                <div class="module-icon">⚙️</div>
-                <div class="module-title">Nodo Central</div>
-            </div>
+      <button id="btn-comenzar-nivel" onclick="comenzarEjerciciosNivel()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-3 px-12 rounded-lg text-lg transition shadow-lg">
+        COMENZAR NIVEL
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. PANTALLA DE ENTRENAMIENTO -->
+  <div id="pantalla-ejercicio" class="hidden-screen flex-1 flex flex-col gap-3 min-h-0">
+    
+    <!-- Header de Control, Mapa General y Acceso de Prueba -->
+    <div class="bg-slate-900 text-white p-3 rounded-md flex justify-between items-center px-6">
+      <span id="label-nivel" class="font-bold text-yellow-400 text-lg">NIVEL 1 (Inicial) / EJERCICIO 1</span>
+      
+      <div class="flex items-center gap-4">
+        <a href="mailto:proferibotmusic@hotmail.com?subject=Consulta%20SLER%20-%20Soporte%20Tecnico" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded border border-slate-600 transition flex items-center gap-1">
+          ✉️ Soporte Mail
+        </a>
+
+        <button onclick="mostrarPantallaFinal()" class="bg-purple-700 hover:bg-purple-600 text-white font-bold text-xs px-3 py-1.5 rounded border border-purple-400 transition shadow">
+          ⚙️ TEST: PANTALLA FINAL
+        </button>
+
+        <div class="flex items-center gap-2">
+          <label for="select-ejercicio-global" class="text-sm font-semibold text-slate-300">Ejercicio Actual:</label>
+          <select id="select-ejercicio-global" onchange="seleccionarEjercicioGlobal(this.value)" class="bg-slate-800 text-yellow-400 font-bold px-3 py-1 rounded border border-slate-600">
+          </select>
         </div>
 
-        <div class="status-footer">
-            Bell Ville. Registro IP 2025. | Software Registrado © Ribot Jonatán
+        <div class="flex items-center gap-2">
+          <label for="select-total-tandas" class="text-sm font-semibold text-slate-400">Mapa de Avance:</label>
+          <select id="select-total-tandas" onchange="saltarATanda(this.value)" class="bg-slate-950 text-emerald-400 font-bold px-3 py-1 rounded border border-slate-700 cursor-pointer shadow-inner">
+          </select>
         </div>
+      </div>
     </div>
 
-    <!-- MODAL DE INSCRIPCIÓN Y PAGOS -->
-    <div id="modal-curso" class="modal-overlay hidden">
-        <div class="modal-card">
-            <button class="close-modal" onclick="cerrarModalCurso()">×</button>
-            
-            <!-- ETAPA 1: REGISTRO Y SEGURIDAD -->
-            <div id="paso-registro">
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <span style="color: var(--sler-turq); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ACCESO SEGURO AL CURSO</span>
-                    <h3 style="margin: 5px 0; color: white;">Registro de Licencia SLER</h3>
-                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Complete sus datos para emitir su credencial de acceso.</p>
-                </div>
-
-                <div class="price-badge">
-                    Inversión de Acceso: Licencia Oficial
-                </div>
-
-                <form onsubmit="procesarInscripcion(event)">
-                    <div class="form-group">
-                        <label>Nombre Completo</label>
-                        <input type="text" id="nombre" class="form-control" placeholder="Ej: Jonatan Ribot" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Correo Electrónico</label>
-                        <input type="email" id="email" class="form-control" placeholder="tu@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Teléfono / WhatsApp</label>
-                        <input type="tel" id="telefono" class="form-control" placeholder="+54 9 ..." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Localidad / País</label>
-                        <input type="text" id="localidad" class="form-control" placeholder="Ej: Bell Ville, Argentina" required>
-                    </div>
-                    <button type="submit" class="btn-action">PROCEDER AL PAGO Y ACTIVAR</button>
-                </form>
-            </div>
-
-            <!-- ETAPA 2: VALIDACIÓN DE PIN -->
-            <div id="paso-pin" class="hidden">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <span style="color: var(--sler-gold); font-size: 10px; font-weight: bold; letter-spacing: 2px;">PAGO APROBADO</span>
-                    <h3 style="margin: 5px 0; color: white;">Ingrese su Clave PIN</h3>
-                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">¡Gracias por tu aporte! Tu código de acceso ha sido enviado a tu correo.</p>
-                </div>
-
-                <div class="form-group">
-                    <label style="text-align: center;">Código PIN</label>
-                    <input type="text" id="pin-ingresado" class="form-control pin-input" placeholder="000000" maxlength="8">
-                </div>
-
-                <div id="msg-alert" class="alert-box"></div>
-
-                <button onclick="validarPin()" class="btn-action">ACTIVAR E INGRESAR</button>
-            </div>
+    <!-- Área Principal de Visualización -->
+    <div class="flex-1 flex gap-4 min-h-0">
+      <div class="flex-1 bg-slate-400 rounded-md border-2 border-slate-500 flex items-center justify-center p-6 overflow-hidden">
+        <div class="w-full h-full bg-white rounded flex items-center justify-center p-8 shadow-inner overflow-auto">
+          <h2 id="placeholder" class="text-5xl font-extrabold text-blue-700">SELECCIONE UN EJERCICIO</h2>
+          <div id="display-sler" class="text-7xl font-extrabold text-slate-900 tracking-widest"></div>
+          <div id="render" class="hidden text-3xl font-mono text-slate-900 leading-relaxed whitespace-pre-wrap"></div>
         </div>
+      </div>
+
+      <!-- Panel de Marcas Registradas -->
+      <div class="w-80 bg-slate-100 rounded-md border border-slate-300 p-4 flex flex-col">
+        <h3 class="text-xs font-bold text-slate-400 uppercase border-b pb-2 mb-2">MARCAS REGISTRADAS</h3>
+        <div id="lista-marcas" class="flex-1 overflow-y-auto space-y-2 text-sm font-mono">
+        </div>
+      </div>
     </div>
 
-    <script>
-        emailjs.init({
-            publicKey: "RGyyCWtGRtZXitRqe",
-        });
+    <!-- Barra Inferior de Control y Cronómetro -->
+    <div class="bg-slate-800 p-4 rounded-md flex justify-between items-center px-8 border-t-2 border-slate-700">
+      <div id="reloj" class="text-4xl font-mono font-bold bg-black text-yellow-400 px-6 py-2 rounded-lg border border-yellow-500/30 tracking-widest shadow-inner">
+        00:00:00
+      </div>
+      
+      <button id="btn" onclick="manejarDisparo()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-2xl py-3 px-16 rounded-lg shadow-xl uppercase tracking-wider transition transform active:scale-95 border-2 border-emerald-300">
+        START
+      </button>
+    </div>
+  </div>
 
-        const PIN_GENERICO = "123456";
+  <!-- 3. PANTALLA DE FINALIZACIÓN Y LOGROS -->
+  <div id="pantalla-final" class="hidden-screen flex-1 flex flex-col items-center justify-center bg-slate-900 text-white rounded-lg shadow-2xl p-8 m-4 overflow-y-auto">
+    <div class="max-w-3xl w-full flex flex-col items-center text-center space-y-6">
+      
+      <div class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold px-4 py-1 rounded-full text-sm uppercase tracking-widest">
+        ¡Entrenamiento Completado!
+      </div>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('pago') === 'exitoso') {
-                const nombre = localStorage.getItem('sler_usuario') || "Cliente";
-                const email = localStorage.getItem('sler_email') || "";
-                const telefono = localStorage.getItem('sler_telefono') || "";
-                const localidad = localStorage.getItem('sler_localidad') || "";
+      <h1 class="text-4xl font-black text-yellow-400 tracking-tight">RESUMEN DE LOGROS ALCANZADOS</h1>
+      
+      <div class="grid grid-cols-2 gap-4 w-full max-w-lg bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-inner">
+        <div class="flex flex-col items-center border-r border-slate-700 pr-4">
+          <span class="text-slate-400 text-xs font-semibold uppercase">Ejercicios Completados</span>
+          <span id="stat-ejercicios" class="text-4xl font-black text-white mt-1">88 / 88</span>
+        </div>
+        <div class="flex flex-col items-center pl-4">
+          <span class="text-slate-400 text-xs font-semibold uppercase">Tiempo Total ("Horas de Vuelo")</span>
+          <span id="stat-tiempo" class="text-3xl font-mono font-bold text-emerald-400 mt-1">00:00:00</span>
+        </div>
+      </div>
 
-                document.getElementById('modal-curso').classList.remove('hidden');
-                document.getElementById('paso-registro').classList.add('hidden');
-                document.getElementById('paso-pin').classList.remove('hidden');
+      <p class="text-slate-300 text-base leading-relaxed max-w-xl">
+        Has completado la secuencia de entrenamiento con la metodología de lectura recíproca SLER. Tu agilidad visual y adaptación al patrón dinámico han alcanzado el nivel óptimo del curso.
+      </p>
 
-                const parametrosAlumno = {
-                    user_name: nombre,
-                    user_email: email,
-                    to_email: email,
-                    to_name: nombre,
-                    passcode: PIN_GENERICO,
-                    pin_code: PIN_GENERICO,
-                    message: PIN_GENERICO
-                };
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left mt-2">
+        <!-- Extensión Chrome -->
+        <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-yellow-400 text-lg mb-2">Práctica Continua (Extensión Chrome)</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+              Experimenta la versión gratuita directa en tu navegador para aplicar la lectura recíproca a cualquier texto web mientras navegas.
+            </p>
+          </div>
+          <a href="https://chromewebstore.google.com/detail/dgildmjcbnjhpbblclglkcfhoheifilb?utm_source=item-share-cb" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-4 rounded text-center transition">
+            PROBAR EXTENSIÓN CHROME
+          </a>
+        </div>
 
-                const parametrosControl = {
-                    user_name: nombre,
-                    user_email: email,
-                    telefono: telefono,
-                    localidad: localidad,
-                    message: `¡Pago Exitoso (Mercado Pago)!\nNombre: ${nombre}\nCorreo: ${email}\nTel: ${telefono}\nUbicación: ${localidad}`
-                };
+        <!-- Extensión Edge -->
+        <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-blue-400 text-lg mb-2">Práctica Continua (Extensión Edge)</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+              Instala la extensión adaptada para Microsoft Edge y mantén el entrenamiento activo en tu navegador predeterminado.
+            </p>
+          </div>
+          <a href="https://microsoftedge.microsoft.com/addons/detail/sler-sistema-de-lectura-y/dgildmjcbnjhpbblclglkcfhoheifilb" target="_blank" class="inline-block bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs py-2 px-4 rounded text-center transition">
+            PROBAR EXTENSIÓN EDGE
+          </a>
+        </div>
+      </div>
 
-                emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosAlumno, "RGyyCWtGRtZXitRqe");
-                emailjs.send("service_9p83cnf", "template_9gypr28", parametrosControl, "RGyyCWtGRtZXitRqe");
-            }
-        });
+      <!-- Recuadro de Transcripción Compleja & IA (Restaurado) -->
+      <div class="w-full text-left mt-1">
+        <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-emerald-400 text-lg mb-2">Transcripción Compleja & IA</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+              Próximamente: Servicio avanzado con Inteligencia Artificial para transcripción, recolección de datos y procesamiento de libros y documentos extensos al formato SLER.
+            </p>
+          </div>
+          <span class="inline-block bg-slate-700 text-slate-400 font-bold text-xs py-2 px-4 rounded text-center border border-slate-600 w-fit">
+            PRÓXIMAMENTE
+          </span>
+        </div>
+      </div>
 
-      function abrirModalCurso() {
-    window.location.href = "https://jonatan823.github.io/02_Modulo_Entrenamiento/index.html";
-}
+      <div class="pt-4 border-t border-slate-800 w-full flex flex-col items-center gap-3">
+        <a href="mailto:proferibotmusic@hotmail.com?subject=Consulta%20Pedagogica%20-%20SLER" class="text-sm font-semibold text-emerald-400 hover:underline flex items-center gap-2">
+          ✉️ ¿Tienes dudas pedagógicas sobre tu avance? Escríbenos a proferibotmusic@hotmail.com
+        </a>
 
-        function cerrarModalCurso() {
-            document.getElementById('modal-curso').classList.add('hidden');
-            document.getElementById('paso-registro').classList.remove('hidden');
-            document.getElementById('paso-pin').classList.add('hidden');
-            document.getElementById('msg-alert').style.display = 'none';
-        }
+        <a href="https://sler.app" target="_blank" class="text-sm font-semibold text-blue-400 hover:underline">
+          Visitar sitio web oficial: sler.app (En desarrollo)
+        </a>
+        
+        <button onclick="irABienvenida()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-8 rounded-lg text-sm transition mt-2">
+          REINICIAR ENTRENAMIENTO
+        </button>
+      </div>
 
-        function procesarInscripcion(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('nombre').value;
-            const email = document.getElementById('email').value;
-            const telefono = document.getElementById('telefono').value;
-            const localidad = document.getElementById('localidad').value;
+    </div>
+  </div>
 
-            localStorage.setItem('sler_usuario', nombre);
-            localStorage.setItem('sler_email', email);
-            localStorage.setItem('sler_telefono', telefono);
-            localStorage.setItem('sler_localidad', localidad);
+  <!-- LÓGICA DE NAVEGACIÓN Y CONEXIÓN MODULAR -->
+  <script type="module">
+    import { cargarEjercicio, manejarDisparo as disparoFirestore } from "./main.js";
 
-            // Tu enlace real de Mercado Pago configurado
-            const linkDePagoMercadoPago = "https://mpago.li/2BgcgdL";
-            
-            window.location.href = linkDePagoMercadoPago;
-        }
+    const infoNiveles = {
+      1: {
+        titulo: "NIVEL 1: INICIAL",
+        desc: "Adaptación del foco visual mediante revelado taquistoscópico y secuencias silábicas breves (Tandas 1 y 2).",
+        opciones: ["Patrón de estímulo silábico directo", "Tandas 1 y 2 (Ejercicios 1 al 21)", "Desarrollo de fijación central"]
+      },
+      2: {
+        titulo: "NIVEL 2: ELEMENTAL",
+        desc: "Estructuras de oraciones con alternancia de dirección y desarrollo de fluidez (Tandas 3, 4 y 5).",
+        opciones: ["Incorporación del motor de ritmo dinámico", "Tandas 3 a 5 (Ejercicios 22 al 51)", "Control de velocidad de barrido"]
+      },
+      3: {
+        titulo: "NIVEL 3: INTERMEDIO",
+        desc: "Procesamiento de párrafos continuos y párrafos dobles recíprocos (Tandas 6 y 7).",
+        opciones: ["Textos de mayor densidad semántica", "Tandas 6 y 7 (Ejercicios 52 al 71)", "Consolidación de lectura recíproca"]
+      },
+      4: {
+        titulo: "NIVEL 4: AVANZADO",
+        desc: "Máximo rendimiento de lectura continua sobre bloques extensos (Tandas 8 y 9).",
+        opciones: ["Formato completo de competencia", "Tandas 8 y 9 (Ejercicios 72 al 87)", "Evaluación final de Horas de Vuelo"]
+      },
+      5: {
+        titulo: "NIVEL 5 (TOP): TEXTO COMPLETO",
+        desc: "Evaluación superior sobre lecturas de alta longitud y dinamismo amplio.",
+        opciones: ["Texto de alta densidad", "Ejercicio 88", "Acreditación de lectura fluida superior"]
+      }
+    };
 
-        function validarPin() {
-            const pinInput = document.getElementById('pin-ingresado').value.trim();
-            const alertBox = document.getElementById('msg-alert');
+    let ejAct = 1;
+    let nivelSeleccionado = 1;
+    let ejerciciosContabilizados = 0;
 
-            if (pinInput === PIN_GENERICO) {
-                alertBox.className = "alert-box alert-success";
-                alertBox.innerText = "¡Clave correcta! Entrando al curso...";
-                alertBox.style.display = "block";
+    window.sonarCampana = function() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1567.98, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.2);
+      } catch(e) {
+        console.log("Audio no disponible:", e);
+      }
+    };
 
-                localStorage.setItem('sler_acceso_concedido', 'true');
+    window.cambiarPantalla = function(idMostrar) {
+      document.getElementById('pantalla-presentacion').classList.add('hidden-screen');
+      document.getElementById('pantalla-bienvenida').classList.add('hidden-screen');
+      document.getElementById('pantalla-portada-nivel').classList.add('hidden-screen');
+      document.getElementById('pantalla-ejercicio').classList.add('hidden-screen');
+      document.getElementById('pantalla-final').classList.add('hidden-screen');
+      document.getElementById(idMostrar).classList.remove('hidden-screen');
+    };
 
-                setTimeout(() => {
-                    window.location.href = "https://jonatan823.github.io/02_Modulo_Entrenamiento/index.html";
-                }, 1200);
-            } else {
-                alertBox.className = "alert-box alert-error";
-                alertBox.innerText = "PIN incorrecto. Intenta nuevamente.";
-                alertBox.style.display = "block";
-            }
-        }
-    </script>
+    window.irABienvenida = function() {
+      window.cambiarPantalla('pantalla-bienvenida');
+    };
+
+    const inicioPorTanda = {
+      1: 1,   // Tanda 1  -> Ejercicio 1
+      2: 12,  // Tanda 2  -> Ejercicio 12
+      3: 22,  // Tanda 3  -> Ejercicio 22
+      4: 32,  // Tanda 4  -> Ejercicio 32
+      5: 42,  // Tanda 5  -> Ejercicio 42
+      6: 52,  // Tanda 6  -> Ejercicio 52
+      7: 62,  // Tanda 7  -> Ejercicio 62
+      8: 72,  // Tanda 8  -> Ejercicio 72
+      9: 82,  // Tanda 9  -> Ejercicio 82
+      10: 88  // Tanda 10 -> Nivel 5 (Ej. 88)
+    };
+
+    window.saltarATanda = function(tanda) {
+      const ejInicio = inicioPorTanda[tanda] || 1;
+      window.seleccionarEjercicioGlobal(ejInicio);
+    };
+
+    window.iniciarNivel = function(numNivel) {
+      nivelSeleccionado = numNivel;
+      const data = infoNiveles[numNivel];
+      document.getElementById('portada-titulo').innerText = data.titulo;
+      document.getElementById('portada-desc').innerText = data.desc;
+      const ul = document.getElementById('portada-opciones');
+      ul.innerHTML = '';
+      data.opciones.forEach(op => {
+        const li = document.createElement('li');
+        li.innerText = op;
+        ul.appendChild(li);
+      });
+      window.cambiarPantalla('pantalla-portada-nivel');
+    };
+
+    window.comenzarEjerciciosNivel = function() {
+      let ejInicio = 1;
+      if (nivelSeleccionado === 2) ejInicio = 22;
+      else if (nivelSeleccionado === 3) ejInicio = 52;
+      else if (nivelSeleccionado === 4) ejInicio = 72;
+      else if (nivelSeleccionado === 5) ejInicio = 88;
+
+      window.cambiarPantalla('pantalla-ejercicio');
+      inicializarDropdowns();
+      window.seleccionarEjercicioGlobal(ejInicio);
+    };
+
+    function inicializarDropdowns() {
+      const selectEj = document.getElementById('select-ejercicio-global');
+      selectEj.innerHTML = '';
+      for (let i = 1; i <= 88; i++) {
+        const optEj = document.createElement('option');
+        optEj.value = i;
+        optEj.innerText = `Ej. ${i}`;
+        selectEj.appendChild(optEj);
+      }
+
+      const selectTotal = document.getElementById('select-total-tandas');
+      if (selectTotal) {
+        selectTotal.removeAttribute('disabled');
+        selectTotal.classList.remove('cursor-not-allowed', 'opacity-90');
+        selectTotal.classList.add('cursor-pointer');
+      }
+
+      actualizarMapaGeneral();
+    }
+
+    function actualizarMapaGeneral() {
+      const selectTotal = document.getElementById('select-total-tandas');
+      selectTotal.innerHTML = '';
+      
+      const tandasInfo = [
+        { t: 1, niv: 1, rango: "1-11" },
+        { t: 2, niv: 1, rango: "12-21" },
+        { t: 3, niv: 2, rango: "22-31" },
+        { t: 4, niv: 2, rango: "32-41" },
+        { t: 5, niv: 2, rango: "42-51" },
+        { t: 6, niv: 3, rango: "52-61" },
+        { t: 7, niv: 3, rango: "62-71" },
+        { t: 8, niv: 4, rango: "72-81" },
+        { t: 9, niv: 4, rango: "82-87" },
+        { t: 10, niv: "5 (TOP)", rango: "88" }
+      ];
+
+      tandasInfo.forEach(info => {
+        const optTanda = document.createElement('option');
+        optTanda.value = info.t;
+        let tandaActual = 1;
+        if (ejAct >= 12 && ejAct <= 21) tandaActual = 2;
+        else if (ejAct >= 22 && ejAct <= 31) tandaActual = 3;
+        else if (ejAct >= 32 && ejAct <= 41) tandaActual = 4;
+        else if (ejAct >= 42 && ejAct <= 51) tandaActual = 5;
+        else if (ejAct >= 52 && ejAct <= 61) tandaActual = 6;
+        else if (ejAct >= 62 && ejAct <= 71) tandaActual = 7;
+        else if (ejAct >= 72 && ejAct <= 81) tandaActual = 8;
+        else if (ejAct >= 82 && ejAct <= 87) tandaActual = 9;
+        else if (ejAct >= 88) tandaActual = 10;
+
+        let estadoTexto = info.t === tandaActual ? "◄ [EN CURSO]" : (info.t < tandaActual ? "✓" : "");
+        optTanda.innerText = `Nivel ${info.niv} — Ej. ${info.rango} ${estadoTexto}`;
+        if (info.t === tandaActual) optTanda.selected = true;
+        selectTotal.appendChild(optTanda);
+      });
+    }
+
+    window.seleccionarEjercicioGlobal = function(val) {
+      ejAct = parseInt(val);
+      const selectEj = document.getElementById('select-ejercicio-global');
+      if (selectEj) selectEj.value = ejAct;
+      actualizarMapaGeneral();
+      cargarEjercicio(ejAct);
+    };
+
+    window.manejarDisparo = function() {
+      disparoFirestore();
+    };
+
+    window.registrarMarcaEnTabla = function() {
+      const reloj = document.getElementById('reloj');
+      if (reloj && reloj.innerText !== '00:00:00') {
+        ejerciciosContabilizados++;
+        const lista = document.getElementById('lista-marcas');
+        const item = document.createElement('div');
+        item.className = "flex justify-between border-b border-slate-200 pb-1 text-slate-700";
+        item.innerHTML = `<span>Ej. ${ejAct}</span><span class="text-blue-600 font-bold">${reloj.innerText}</span>`;
+        if (lista) lista.prepend(item);
+      }
+    };
+
+    window.mostrarPantallaFinal = function() {
+      document.getElementById('stat-ejercicios').innerText = `${ejerciciosContabilizados > 0 ? ejerciciosContabilizados : 88} / 88`;
+      
+      const relojPrincipal = document.getElementById('reloj');
+      const tiempoTotalAcumulado = relojPrincipal ? relojPrincipal.innerText : "00:00:00";
+      document.getElementById('stat-tiempo').innerText = tiempoTotalAcumulado;
+
+      window.cambiarPantalla('pantalla-final');
+    };
+  </script>
 </body>
 </html>
