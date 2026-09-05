@@ -260,9 +260,9 @@
             <!-- ETAPA 2: VALIDACIÓN DE PIN -->
             <div id="paso-pin" class="hidden">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <span style="color: var(--sler-gold); font-size: 10px; font-weight: bold; letter-spacing: 2px;">VERIFICACIÓN DE ACCESO</span>
+                    <span style="color: var(--sler-gold); font-size: 10px; font-weight: bold; letter-spacing: 2px;">PAGO APROBADO</span>
                     <h3 style="margin: 5px 0; color: white;">Ingrese su Clave PIN</h3>
-                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Se ha enviado un código de acceso a su correo.</p>
+                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">¡Gracias por tu aporte! Tu código de acceso ha sido enviado a tu correo.</p>
                 </div>
 
                 <div class="form-group">
@@ -284,6 +284,47 @@
 
         const PIN_GENERICO = "123456";
 
+        // Al cargar la página, revisamos si el usuario acaba de volver de Mercado Pago con éxito
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('pago') === 'exitoso') {
+                // Recuperamos los datos guardados antes de irse a pagar
+                const nombre = localStorage.getItem('sler_usuario') || "Cliente";
+                const email = localStorage.getItem('sler_email') || "";
+                const telefono = localStorage.getItem('sler_telefono') || "";
+                const localidad = localStorage.getItem('sler_localidad') || "";
+
+                // Abrimos el modal directamente en el paso del PIN
+                document.getElementById('modal-curso').classList.remove('hidden');
+                document.getElementById('paso-registro').classList.add('hidden');
+                document.getElementById('paso-pin').classList.remove('hidden');
+
+                // Parámetros para el envío automático del PIN al alumno
+                const parametrosAlumno = {
+                    user_name: nombre,
+                    user_email: email,
+                    to_email: email,
+                    to_name: nombre,
+                    passcode: PIN_GENERICO,
+                    pin_code: PIN_GENERICO,
+                    message: PIN_GENERICO
+                };
+
+                // Parámetros para la alerta administrativa de pago confirmado
+                const parametrosControl = {
+                    user_name: nombre,
+                    user_email: email,
+                    telefono: telefono,
+                    localidad: localidad,
+                    message: `¡Pago Exitoso ($7 USD)!\nNombre: ${nombre}\nCorreo: ${email}\nTel: ${telefono}\nUbicación: ${localidad}`
+                };
+
+                // Envío automático de los correos al retornar de la pasarela
+                emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosAlumno, "RGyyCWtGRtZXitRqe");
+                emailjs.send("service_9p83cnf", "template_9gypr28", parametrosControl, "RGyyCWtGRtZXitRqe");
+            }
+        });
+
         function abrirModalCurso() {
             document.getElementById('modal-curso').classList.remove('hidden');
         }
@@ -302,49 +343,17 @@
             const telefono = document.getElementById('telefono').value;
             const localidad = document.getElementById('localidad').value;
 
+            // Guardamos los datos temporalmente en el navegador para recuperarlos al volver del pago
             localStorage.setItem('sler_usuario', nombre);
             localStorage.setItem('sler_email', email);
             localStorage.setItem('sler_telefono', telefono);
             localStorage.setItem('sler_localidad', localidad);
 
-            // Parámetros para el correo del alumno
-            const parametrosAlumno = {
-                user_name: nombre,
-                user_email: email,
-                to_email: email,
-                to_name: nombre,
-                passcode: PIN_GENERICO,
-                pin_code: PIN_GENERICO,
-                message: PIN_GENERICO
-            };
-
-            // Parámetros para la alerta de control administrativa con datos de seguridad ampliados
-            const parametrosControl = {
-                user_name: nombre,
-                user_email: email,
-                telefono: telefono,
-                localidad: localidad,
-                message: `Nuevo registro pago ($7 USD):\nNombre: ${nombre}\nCorreo: ${email}\nTel: ${telefono}\nUbicación: ${localidad}`
-            };
-
-            document.getElementById('paso-registro').classList.add('hidden');
-            document.getElementById('paso-pin').classList.remove('hidden');
-
-            // Envío 1: PIN al alumno
-            emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosAlumno, "RGyyCWtGRtZXitRqe")
-                .then(function(respuesta) {
-                    console.log("PIN enviado al alumno con éxito.");
-                }, function(error) {
-                    console.error("Error al enviar el PIN al alumno:", error);
-                });
-
-            // Envío 2: Alerta detallada al Administrador
-            emailjs.send("service_9p83cnf", "template_9gypr28", parametrosControl, "RGyyCWtGRtZXitRqe")
-                .then(function(respuesta) {
-                    console.log("Aviso de nuevo cliente enviado al admin con éxito.");
-                }, function(error) {
-                    console.error("Error al enviar aviso al admin:", error);
-                });
+            // Enlace de pago de Mercado Pago (Reemplaza con tu link real generado en tu cuenta)
+            const linkDePagoMercadoPago = "https://link.mercadopago.com.ar/tu-link-de-pago";
+            
+            // Redirigimos al usuario a pagar
+            window.location.href = linkDePagoMercadoPago;
         }
 
         function validarPin() {
