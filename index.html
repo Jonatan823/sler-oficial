@@ -27,7 +27,6 @@
             overflow-x: hidden;
         }
 
-        /* BARRA SUPERIOR TIPO RED SOCIAL */
         .fb-header {
             display: flex;
             justify-content: space-around;
@@ -50,7 +49,6 @@
             padding: 15px;
         }
 
-        /* BANNER PRINCIPAL (S.L.E.R. WORKSTATION) */
         .hero-module {
             background: linear-gradient(45deg, #0a2438, #1e3a53);
             border-radius: 15px; border: 1px solid var(--accent);
@@ -66,7 +64,6 @@
             margin-top: 15px; font-size: 14px;
         }
 
-        /* GRILLA DE MÓDULOS TIPO APP */
         .module-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -89,7 +86,6 @@
         .module-icon { font-size: 28px; margin-bottom: 10px; }
         .module-title { font-size: 13px; font-weight: 600; color: var(--text-dim); }
 
-        /* MODAL DE REGISTRO / CURSO */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -104,11 +100,13 @@
             background: var(--card);
             border: 1px solid var(--sler-turq);
             border-radius: 16px;
-            padding: 30px;
-            max-width: 420px;
+            padding: 25px;
+            max-width: 440px;
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .close-modal {
             position: absolute;
@@ -117,24 +115,31 @@
             color: var(--text-dim); font-size: 20px;
             cursor: pointer;
         }
-        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group { margin-bottom: 12px; text-align: left; }
         .form-group label {
             display: block; font-size: 11px; font-weight: bold;
-            color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px;
+            color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px;
         }
         .form-control {
             width: 100%; background: var(--bg);
             border: 1px solid var(--border); border-radius: 8px;
-            padding: 10px; color: white; font-size: 14px;
+            padding: 9px; color: white; font-size: 13px;
             box-sizing: border-box; outline: none;
         }
         .form-control:focus { border-color: var(--accent); }
         .pin-input { text-align: center; font-family: monospace; font-size: 20px; letter-spacing: 5px; }
         .btn-action {
-            width: 100%; background: var(--accent);
-            color: white; border: none; padding: 12px;
+            width: 100%; background: var(--sler-turq);
+            color: #041625; border: none; padding: 12px;
             border-radius: 50px; font-weight: bold; cursor: pointer;
             margin-top: 10px; text-transform: uppercase; font-size: 12px;
+        }
+        .price-badge {
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px dashed var(--sler-turq);
+            padding: 8px; border-radius: 8px;
+            text-align: center; margin-bottom: 15px;
+            font-size: 12px; color: var(--sler-turq); font-weight: bold;
         }
         .alert-box {
             padding: 10px; border-radius: 8px; font-size: 12px;
@@ -144,7 +149,6 @@
         .alert-error { background: rgba(244, 63, 94, 0.2); border: 1px solid var(--error); color: var(--error); }
         .hidden { display: none !important; }
 
-        /* AJUSTE PARA ESCRITORIO */
         @media (min-width: 801px) {
             .module-grid { grid-template-columns: repeat(3, 1fr); }
             .container { padding: 40px; }
@@ -174,7 +178,6 @@
         </div>
 
         <div class="module-grid">
-            <!-- MÓDULO NUEVO: CURSO CON REGISTRO Y PIN -->
             <div class="module-card" onclick="abrirModalCurso()" style="border-color: var(--sler-turq);">
                 <div class="module-icon">🎓</div>
                 <div class="module-title" style="color: var(--sler-turq);">Curso SLER</div>
@@ -216,17 +219,21 @@
         </div>
     </div>
 
-    <!-- MODAL DE INSCRIPCIÓN Y ACTIVACIÓN -->
+    <!-- MODAL DE INSCRIPCIÓN Y PAGOS -->
     <div id="modal-curso" class="modal-overlay hidden">
         <div class="modal-card">
             <button class="close-modal" onclick="cerrarModalCurso()">×</button>
             
-            <!-- ETAPA 1: REGISTRO -->
+            <!-- ETAPA 1: REGISTRO Y SEGURIDAD -->
             <div id="paso-registro">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <span style="color: var(--sler-turq); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ACCESO A MÓDULO</span>
-                    <h3 style="margin: 5px 0; color: white;">Curso de Lectura SLER</h3>
-                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Ingresa tus datos para habilitar el PIN de entrada.</p>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <span style="color: var(--sler-turq); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ACCESO SEGURO AL CURSO</span>
+                    <h3 style="margin: 5px 0; color: white;">Registro de Licencia SLER</h3>
+                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Complete sus datos para emitir su credencial de acceso.</p>
+                </div>
+
+                <div class="price-badge">
+                    Inversión de Acceso: $7.00 USD
                 </div>
 
                 <form onsubmit="procesarInscripcion(event)">
@@ -238,26 +245,34 @@
                         <label>Correo Electrónico</label>
                         <input type="email" id="email" class="form-control" placeholder="tu@email.com" required>
                     </div>
-                    <button type="submit" class="btn-action">REGISTRAR Y CONTINUAR</button>
+                    <div class="form-group">
+                        <label>Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" class="form-control" placeholder="+54 9 ..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Localidad / País</label>
+                        <input type="text" id="localidad" class="form-control" placeholder="Ej: Bell Ville, Argentina" required>
+                    </div>
+                    <button type="submit" class="btn-action">PROCEDER AL PAGO Y ACTIVAR</button>
                 </form>
             </div>
 
             <!-- ETAPA 2: VALIDACIÓN DE PIN -->
             <div id="paso-pin" class="hidden">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <span style="color: var(--sler-gold); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ACTIVACIÓN DE LICENCIA</span>
-                    <h3 style="margin: 5px 0; color: white;">Ingrese su Código PIN</h3>
-                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Introduce el código para iniciar la sesión.</p>
+                    <span style="color: var(--sler-gold); font-size: 10px; font-weight: bold; letter-spacing: 2px;">VERIFICACIÓN DE ACCESO</span>
+                    <h3 style="margin: 5px 0; color: white;">Ingrese su Clave PIN</h3>
+                    <p style="font-size: 11px; color: var(--text-dim); margin: 0;">Se ha enviado un código de acceso a su correo.</p>
                 </div>
 
                 <div class="form-group">
-                    <label style="text-align: center;">Clave PIN</label>
+                    <label style="text-align: center;">Código PIN</label>
                     <input type="text" id="pin-ingresado" class="form-control pin-input" placeholder="000000" maxlength="8">
                 </div>
 
                 <div id="msg-alert" class="alert-box"></div>
 
-                <button onclick="validarPin()" class="btn-action" style="background: var(--sler-turq); color: #041625;">ACTIVAR E INGRESAR</button>
+                <button onclick="validarPin()" class="btn-action">ACTIVAR E INGRESAR</button>
             </div>
         </div>
     </div>
@@ -284,57 +299,53 @@
             e.preventDefault();
             const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const localidad = document.getElementById('localidad').value;
 
             localStorage.setItem('sler_usuario', nombre);
             localStorage.setItem('sler_email', email);
+            localStorage.setItem('sler_telefono', telefono);
+            localStorage.setItem('sler_localidad', localidad);
 
-            // 1. Parámetros para el correo que recibe el alumno
+            // Parámetros para el correo del alumno
             const parametrosAlumno = {
                 user_name: nombre,
                 user_email: email,
                 to_email: email,
                 to_name: nombre,
-                email: email,
-                recipient: email,
-                reply_to: email,
                 passcode: PIN_GENERICO,
                 pin_code: PIN_GENERICO,
                 message: PIN_GENERICO
             };
 
-            // 2. Parámetros para el correo de control (aviso de nuevo alumno para ti)
+            // Parámetros para la alerta de control administrativa con datos de seguridad ampliados
             const parametrosControl = {
                 user_name: nombre,
                 user_email: email,
-                to_email: "joniybenji1@gmail.com",
-                to_name: "Administrador",
-                email: email,
-                recipient: email,
-                reply_to: email,
-                passcode: PIN_GENERICO,
-                pin_code: PIN_GENERICO,
-                message: `Nuevo registro en el curso SLER:\nNombre: ${nombre}\nCorreo: ${email}`
+                telefono: telefono,
+                localidad: localidad,
+                message: `Nuevo registro pago ($7 USD):\nNombre: ${nombre}\nCorreo: ${email}\nTel: ${telefono}\nUbicación: ${localidad}`
             };
 
             document.getElementById('paso-registro').classList.add('hidden');
             document.getElementById('paso-pin').classList.remove('hidden');
 
-            // Envío 1: Al alumno
+            // Envío 1: PIN al alumno
             emailjs.send("service_9p83cnf", "template_1zmi78m", parametrosAlumno, "RGyyCWtGRtZXitRqe")
                 .then(function(respuesta) {
-                    console.log("PIN enviado al alumno con éxito:", respuesta.status);
+                    console.log("PIN enviado al alumno con éxito.");
                 }, function(error) {
                     console.error("Error al enviar el PIN al alumno:", error);
                 });
 
-            // Envío 2: La alerta a tu correo de control
+            // Envío 2: Alerta detallada al Administrador
             emailjs.send("service_9p83cnf", "template_9gypr28", parametrosControl, "RGyyCWtGRtZXitRqe")
                 .then(function(respuesta) {
                     console.log("Aviso de nuevo cliente enviado al admin con éxito.");
                 }, function(error) {
                     console.error("Error al enviar aviso al admin:", error);
                 });
-        } // <-- ESTA LLAVE FALTABA Y ROMPÍA TODO EL SCRIPT
+        }
 
         function validarPin() {
             const pinInput = document.getElementById('pin-ingresado').value.trim();
