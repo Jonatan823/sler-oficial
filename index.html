@@ -260,7 +260,7 @@
       1: {
         titulo: "NIVEL 1: INICIAL",
         desc: "Adaptación del foco visual mediante revelado taquistoscópico y secuencias silábicas breves.",
-        opciones: ["Patrón de estímulo silábico directo", "Tandas 1 y 2 (Ejercicios 1 al 21)", "Acceso Libre / Freemium"],
+        opciones: ["Patrón de estímulo silábico directo", "Tanda 1 y 2 (Ejercicios 1 al 21)", "Acceso Libre / Freemium"],
         esGratis: true
       },
       2: {
@@ -334,7 +334,7 @@
 
     window.cerrarModalPago = function() {
       document.getElementById('modal-pago').classList.add('hidden-screen');
-      window.iniciarNivel(2); // Devuelve al Nivel 2 (último nivel gratuito)
+      window.iniciarNivel(2);
     };
 
     window.cambiarPantalla = function(idMostrar) {
@@ -351,21 +351,20 @@
     };
 
     const inicioPorTanda = {
-      1: 1,   // Ej. 1-11 (Nivel 1)
-      2: 12,  // Ej. 12-21 (Nivel 1)
-      3: 22,  // Ej. 22-31 (Nivel 2)
-      4: 32,  // Ej. 32-41 (Nivel 2)
-      5: 42,  // Ej. 42-51 (Nivel 2)
-      6: 52,  // Ej. 52-61 (Nivel 3 - Pago)
-      7: 62,  // Ej. 62-71 (Nivel 3 - Pago)
-      8: 72,  // Ej. 72-81 (Nivel 4 - Pago)
-      9: 82,  // Ej. 82-87 (Nivel 4 - Pago)
-      10: 88  // Ej. 88 (Nivel 5 - Pago)
+      1: 1,
+      2: 12,
+      3: 22,
+      4: 32,
+      5: 42,
+      6: 52,
+      7: 62,
+      8: 72,
+      9: 82,
+      10: 88
     };
 
     window.saltarATanda = function(tanda) {
       const ejInicio = inicioPorTanda[tanda] || 1;
-      // Los niveles 1 y 2 llegan hasta el ejercicio 51. El cobro empieza en la Tanda 6 (Ejercicio 52 en adelante).
       if (ejInicio >= 52 && !usuarioPremium) {
         document.getElementById('modal-pago').classList.remove('hidden-screen');
         return;
@@ -416,7 +415,6 @@
       for (let i = 1; i <= 88; i++) {
         const optEj = document.createElement('option');
         optEj.value = i;
-        // Solo marca de pago a partir del ejercicio 52 (Nivel 3 en adelante)
         optEj.innerText = `Ej. ${i} ${i >= 52 && !usuarioPremium ? '🔒 (Pago)' : ''}`;
         selectEj.appendChild(optEj);
       }
@@ -462,7 +460,6 @@
         else if (ejAct >= 82 && ejAct <= 87) tandaActual = 9;
         else if (ejAct >= 88) tandaActual = 10;
 
-        // Tandas 6 en adelante requieren pago (Nivel 3, 4 y 5)
         let bloqueado = (info.t >= 6 && !usuarioPremium);
         let estadoTexto = info.t === tandaActual ? "◄ [EN CURSO]" : (info.t < tandaActual ? "✓" : "");
         if (bloqueado) estadoTexto = "🔒 [PRO]";
@@ -475,7 +472,6 @@
 
     window.seleccionarEjercicioGlobal = function(val) {
       const numEj = parseInt(val);
-      // Bloquear si es ejercicio 52 o superior sin ser premium
       if (numEj >= 52 && !usuarioPremium) {
         document.getElementById('modal-pago').classList.remove('hidden-screen');
         return;
